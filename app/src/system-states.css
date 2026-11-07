@@ -1,0 +1,399 @@
+.system-state {
+  display: grid;
+  min-height: 280px;
+  place-items: center;
+  align-content: center;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  color: var(--text);
+  background: var(--surface);
+  text-align: center;
+}
+
+.system-state > span {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border-radius: 14px;
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.system-state h2 {
+  margin: 13px 0 4px;
+  font-size: 18px;
+}
+
+.system-state p {
+  max-width: 330px;
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.system-skeleton {
+  display: grid;
+  width: min(100%, 260px);
+  gap: 7px;
+  margin-top: 4px;
+}
+
+.system-skeleton i {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--background),
+    color-mix(in srgb, var(--border) 55%, var(--surface)),
+    var(--background)
+  );
+  background-size: 220% 100%;
+  animation: state-shimmer 1.2s linear infinite;
+}
+
+.system-skeleton i:nth-child(2) {
+  width: 82%;
+}
+
+.system-skeleton i:nth-child(3) {
+  width: 64%;
+}
+
+.subscription-dev-tool {
+  position: fixed;
+  z-index: 120;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 7px 9px;
+  color: var(--muted);
+  background: var(--surface);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--text) 14%, transparent);
+}
+
+.subscription-dev-tool span {
+  font:
+    700 8px Inter,
+    sans-serif;
+}
+
+.subscription-dev-tool select {
+  border: 0;
+  color: var(--primary);
+  outline: 0;
+  background: transparent;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.subscription-banner {
+  position: fixed;
+  z-index: 115;
+  top: 10px;
+  left: 50%;
+  display: flex;
+  width: min(calc(100% - 24px), 640px);
+  align-items: center;
+  gap: 10px;
+  transform: translateX(-50%);
+  border: 1px solid;
+  border-radius: 11px;
+  padding: 9px 12px;
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--text) 10%, transparent);
+}
+
+.subscription-banner.grace {
+  color: var(--info);
+  border-color: color-mix(in srgb, var(--info) 28%, var(--border));
+  background: color-mix(in srgb, var(--info) 8%, var(--surface));
+}
+
+.subscription-banner.limited {
+  color: var(--warning);
+  border-color: color-mix(in srgb, var(--warning) 30%, var(--border));
+  background: color-mix(in srgb, var(--warning) 9%, var(--surface));
+}
+
+.subscription-banner.suspended {
+  color: var(--danger);
+  border-color: color-mix(in srgb, var(--danger) 28%, var(--border));
+  background: color-mix(in srgb, var(--danger) 8%, var(--surface));
+}
+
+.subscription-banner span {
+  min-width: 0;
+  flex: 1;
+}
+
+.subscription-banner b,
+.subscription-banner small {
+  display: block;
+}
+
+.subscription-banner b {
+  font-size: 11px;
+}
+
+.subscription-banner small {
+  margin-top: 1px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.blocked-action {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  border: 1px solid color-mix(in srgb, var(--warning) 28%, var(--border));
+  border-radius: 10px;
+  padding: 12px;
+  color: var(--warning);
+  background: color-mix(in srgb, var(--warning) 8%, var(--surface));
+}
+
+.blocked-action b,
+.blocked-action small {
+  display: block;
+}
+
+.blocked-action b {
+  font-size: 11px;
+}
+
+.blocked-action small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.blocked-action.compact {
+  padding: 8px 10px;
+}
+
+.states-review {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 38px 0 90px;
+  color: var(--text);
+}
+
+.states-review > header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.states-review > header > div > span {
+  color: var(--primary);
+  font:
+    700 10px Inter,
+    sans-serif;
+  letter-spacing: 0.14em;
+}
+
+.states-review h1 {
+  margin: 7px 0 4px;
+  font-size: 30px;
+}
+
+.states-review > header p,
+.states-title p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.states-review > header > label {
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 8px 10px;
+  color: var(--muted);
+  background: var(--surface);
+  font-size: 9px;
+}
+
+.states-review > header select {
+  margin-left: 7px;
+  border: 0;
+  color: var(--primary);
+  background: transparent;
+  font-weight: 700;
+}
+
+.states-section {
+  margin-top: 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  background: var(--surface);
+}
+
+.states-title {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.states-title > span {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 8px;
+  color: var(--primary);
+  background: var(--primary-soft);
+  font:
+    700 9px Inter,
+    sans-serif;
+}
+
+.states-title h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.states-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.states-grid .system-state {
+  min-height: 250px;
+}
+
+.banner-review {
+  display: grid;
+  gap: 9px;
+}
+
+.banner-review .subscription-banner {
+  position: static;
+  width: 100%;
+  transform: none;
+  box-shadow: none;
+}
+
+.access-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.access-matrix article {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 10px;
+}
+
+.access-matrix article.allowed {
+  color: var(--success);
+  background: color-mix(in srgb, var(--success) 6%, var(--surface));
+}
+
+.access-matrix article.blocked {
+  color: var(--warning);
+  background: color-mix(in srgb, var(--warning) 6%, var(--surface));
+}
+
+.access-matrix span {
+  min-width: 0;
+}
+
+.access-matrix b,
+.access-matrix small {
+  display: block;
+}
+
+.access-matrix b {
+  color: var(--text);
+  font-size: 11px;
+}
+
+.access-matrix small {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.states-section > .blocked-action {
+  margin-top: 12px;
+}
+
+.suspended-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  border-radius: 12px;
+  padding: 16px;
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.suspended-summary span {
+  flex: 1;
+}
+
+.suspended-summary b,
+.suspended-summary small {
+  display: block;
+}
+
+.suspended-summary small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+@keyframes state-shimmer {
+  to {
+    background-position: -220% 0;
+  }
+}
+
+@media (max-width: 800px) {
+  .states-grid,
+  .access-matrix {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .subscription-dev-tool {
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .states-review {
+    width: calc(100% - 28px);
+    padding-top: 24px;
+  }
+
+  .states-review > header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .states-grid,
+  .access-matrix {
+    grid-template-columns: 1fr;
+  }
+
+  .states-section {
+    padding: 14px;
+  }
+}

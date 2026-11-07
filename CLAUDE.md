@@ -8,6 +8,9 @@ Static school website (HTML/CSS/JS, English only). Contact forms use `mailto:` (
 - `assets/` — web images (crest, logo, class photos, principal). `assets/src/` = original full-size images.
 - Local preview: `.claude/launch.json` → `python -m http.server 5500`.
 
+## Madrasa management app (separate project, same repo)
+- Lives in `app/`. Its own rules: `app/CLAUDE.md`; progress: `app/docs/progress.md` (read first).
+
 ## GitHub
 - Repo: https://github.com/khairul-personal/HQSM (public since 2026-11-08), branch `main`.
 - Commit and push after changes: `git add -A && git commit -m "..." && git push`.

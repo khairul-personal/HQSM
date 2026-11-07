@@ -1,0 +1,11 @@
+{
+  "title": "hqsm",
+  "description": "Explore and interact with content tailored to your needs, making information easier to find, understand, and use.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
