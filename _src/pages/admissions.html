@@ -1,0 +1,127 @@
+---
+title: Admissions
+description: Admission status, process, required documents, fees and payment rules at Holy Quran School & Madrasah, Rangpur. Send an admission inquiry.
+nav: admissions
+---
+<section class="page-head">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><span aria-current="page">Admissions</span></nav>
+    <h1>Admissions</h1>
+    <p class="lead">Everything families need to apply: current status, the process, what to bring, and how fees work.</p>
+  </div>
+  <div class="page-head-rule"></div>
+</section>
+
+<section class="section-tight">
+  <div class="wrap">
+    <div class="status-card reveal">
+      <span class="pulse" aria-hidden="true"></span>
+      <div><h3>No new admission dates announced yet</h3><p>Send an inquiry today and the office will contact you as soon as the next intake opens.</p></div>
+      <a class="btn btn-red btn-sm" href="#inquiry">Send an inquiry</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <span class="label">How to apply</span>
+      <h2>Three steps to a place</h2>
+    </div>
+    <ol class="steps">
+      <li class="reveal"><h3>Send an inquiry</h3><p>Use the form below or call the office. We reply by phone.</p></li>
+      <li class="reveal d1"><h3>Complete the admission form</h3><p>Fill in the student’s and parents’ details and attach the documents listed below.</p></li>
+      <li class="reveal d2"><h3>Enrolment confirmed</h3><p>The office confirms your child’s place and when classes begin.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="section bg-stone">
+  <div class="wrap">
+    <div class="head">
+      <span class="label">What you’ll need</span>
+      <h2>Information for the admission form</h2>
+    </div>
+    <div class="docs">
+      <div>{{check}}Student’s name</div>
+      <div>{{check}}Father’s name</div>
+      <div>{{check}}Mother’s name</div>
+      <div>{{check}}Date of birth</div>
+      <div>{{check}}Birth certificate</div>
+      <div>{{check}}Student photo</div>
+      <div>{{check}}Mobile number</div>
+      <div>{{check}}Email address</div>
+      <div>{{check}}Home address and city</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="fees">
+  <div class="wrap split split-7-5">
+    <div class="stack">
+      <span class="label">Fees &amp; payments</span>
+      <h2>Monthly dues, <span class="accent">paid in advance.</span></h2>
+      <p class="lead">The school runs on its own funding and student tuition. All dues for the current month, including tuition and coaching fees, are paid in advance by the 7th.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>When you pay</th><th>Late fee</th></tr></thead>
+          <tbody>
+            <tr><td>By the 7th of the month</td><td class="amt" style="color:var(--green-deep)">None</td></tr>
+            <tr><td>By the 15th</td><td class="amt">৳50</td></tr>
+            <tr><td>By the 30th</td><td class="amt">৳100</td></tr>
+            <tr><td>Together with next month’s fees</td><td class="amt">৳200</td></tr>
+            <tr><td>Two consecutive months unpaid — added to the third month’s fees</td><td class="amt">৳400</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="form-note">Never make a payment without a receipt.</p>
+    </div>
+    <div class="stack">
+      <div class="callout warn">
+        {{info}}
+        <p><b>Two months unpaid:</b> the student cannot sit the first semester, second semester or annual exams until all dues are cleared.</p>
+      </div>
+      <div class="callout warn">
+        {{info}}
+        <p><b>Three months unpaid:</b> the student’s name is removed from the attendance register. To continue, re-enrol by paying all dues plus a fine equal to one month’s tuition.</p>
+      </div>
+      <div class="rule-group">
+        <h3>Attendance</h3>
+        <ul class="ticks">
+          <li>Absence without written permission or a medical certificate is fined ৳10 per day.</li>
+          <li>15 consecutive days’ absence without permission cancels the admission.</li>
+          <li>For urgent leave, apply in writing to the principal.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-green" id="inquiry">
+  <div class="wrap split">
+    <div class="stack">
+      <span class="label label-light">Admission inquiry</span>
+      <h2>Tell us about <span class="accent">your child.</span></h2>
+      <p class="lead">Sending an inquiry doesn’t commit you to anything. The office will call you back with next steps.</p>
+      <div class="cta-actions" style="margin-top:1rem">
+        <small>Prefer to call?</small>
+        <a class="phone" href="tel:01911020507">01911-020507</a>
+        <a class="phone" href="tel:01908868707" style="font-size:1.5rem">01908-868707</a>
+      </div>
+    </div>
+    <form class="form-card" data-mailto="Admission inquiry" novalidate>
+      <h3>Admission inquiry</h3>
+      <div class="form-grid">
+        <div class="field full"><label for="a-student">Student’s name</label><input id="a-student" name="Student" autocomplete="off" required></div>
+        <div class="field"><label for="a-dob">Date of birth <i>(optional)</i></label><input id="a-dob" name="Date of birth" type="date"></div>
+        <div class="field"><label for="a-class">Class sought <i>(optional)</i></label><input id="a-class" name="Class sought"></div>
+        <div class="field"><label for="a-guardian">Guardian’s name</label><input id="a-guardian" name="Guardian" autocomplete="name" required></div>
+        <div class="field"><label for="a-phone">Mobile number</label><input id="a-phone" name="Mobile" type="tel" inputmode="tel" autocomplete="tel" placeholder="01XXX-XXXXXX" required></div>
+        <div class="field full"><label for="a-msg">Anything else <i>(optional)</i></label><textarea id="a-msg" name="Message" rows="3"></textarea></div>
+      </div>
+      <p class="form-error" role="alert" hidden></p>
+      <button class="btn btn-red" type="submit">Send inquiry {{arrow}}</button>
+      <p class="form-note">Opens your email app with these details, addressed to hqsmedu@gmail.com.</p>
+    </form>
+  </div>
+</section>
