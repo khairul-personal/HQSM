@@ -879,3 +879,86 @@ kbd,
 .student-table-wrap th.num-col {
   text-align: right;
 }
+
+/* ---------- Deep green frame (user choice 2026-11-08) ---------- */
+
+:root {
+  --frame: #0c3b2a;
+  --frame-raised: rgb(255 255 255 / 0.07);
+  --frame-active: rgb(255 255 255 / 0.12);
+  --frame-line: rgb(255 255 255 / 0.1);
+  --frame-text: rgb(255 255 255 / 0.8);
+  --frame-muted: rgb(255 255 255 / 0.55);
+  --frame-accent: #d9ae5c;
+}
+:root[data-theme="dark"] {
+  --frame: #0e1a15;
+}
+
+.student-sidebar {
+  background: var(--frame);
+  border-right: 0;
+  color: var(--frame-text);
+}
+.student-brand {
+  border-bottom-color: var(--frame-line);
+}
+.student-brand > span {
+  background: var(--surface);
+  color: var(--frame);
+}
+.student-brand b {
+  color: #fff;
+}
+.student-brand small,
+.student-brand svg {
+  color: var(--frame-muted);
+}
+.student-sidebar nav p {
+  color: var(--frame-muted);
+}
+.student-sidebar nav button {
+  color: var(--frame-text);
+}
+.student-sidebar nav button svg {
+  color: var(--frame-muted);
+}
+.student-sidebar nav button > b {
+  background: var(--frame-raised);
+  color: var(--frame-text);
+}
+.student-sidebar nav button:hover {
+  background: var(--frame-raised);
+  color: #fff;
+}
+.student-sidebar nav button.active {
+  background: var(--frame-active);
+  color: #fff;
+}
+.student-sidebar nav button.active svg {
+  color: var(--frame-accent);
+}
+.student-sidebar nav button.active::before {
+  background: var(--frame-accent);
+}
+.student-sidebar nav button.active > b {
+  background: var(--frame-accent);
+  color: var(--frame);
+}
+.student-sidebar nav button:focus-visible {
+  box-shadow: 0 0 0 2px var(--frame-accent);
+}
+.sidebar-profile {
+  border-top-color: var(--frame-line);
+}
+.sidebar-profile b {
+  color: #fff;
+}
+.sidebar-profile small,
+.sidebar-profile svg {
+  color: var(--frame-muted);
+}
+.sidebar-profile .ds-avatar {
+  background: var(--frame-active);
+  color: #fff;
+}

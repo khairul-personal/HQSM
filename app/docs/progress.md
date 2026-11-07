@@ -20,7 +20,8 @@ Read this at the start of every session. Update it after every phase.
 - Design overhaul — diagnosis: 600+ CSS rules use 7–12px text (spec: Bengali ≥ 15px, line-height ≥ 1.6) and the
   CSS holds 330 different hex colours (spec: 12 tokens), spread over 17 per-screen files.
   Foundation: `src/theme.css` (all tokens + shared button/badge/shell/table styles, loaded last). **Pilot done:**
-  app shell + student list. Waiting for user approval of the pilot look, then roll out screen by screen
+  app shell + student list. Look chosen by user: **deep green frame** (dark green sidebar `--frame`, gold
+  `--frame-accent` for the active item, light content). Waiting for user approval of the pilot look, then roll out screen by screen
   (rewrite each screen's CSS onto the tokens, delete its old rules). Mobile cards still need the rollout.
 - **New top priority (user, 2026-11-08): full design overhaul** — user finds the current UI generic / "AI-looking".
   Do this next, before fixes 3–4 and before B2–B5. Get the design direction approved first, then apply to every screen.
