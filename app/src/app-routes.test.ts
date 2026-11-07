@@ -4,6 +4,7 @@ import {
   homeworkCheckPath,
   homeworkChildPath,
   guardianHomePath,
+  isKnownRoute,
   isSectionPath,
   staffIdFromPath,
   staffPath,
@@ -13,6 +14,14 @@ import {
 } from "./app-routes";
 
 describe("hash route paths", () => {
+  it("recognises known sections and rejects unknown routes", () => {
+    expect(isKnownRoute("/")).toBe(true);
+    expect(isKnownRoute("/staff/EMP-024")).toBe(true);
+    expect(isKnownRoute("/homework/check/HW-041")).toBe(true);
+    expect(isKnownRoute("/studentsx")).toBe(false);
+    expect(isKnownRoute("/no-such-page")).toBe(false);
+  });
+
   it("builds encoded staff and student detail paths", () => {
     expect(staffPath("EMP-024")).toBe("/staff/EMP-024");
     expect(studentPath("STU 10241")).toBe("/students/STU%2010241");

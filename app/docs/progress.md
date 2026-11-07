@@ -13,7 +13,12 @@ Read this at the start of every session. Update it after every phase.
 
 ## Current status (2026-11-08)
 
-**Phase 0 done — waiting for user approval.** Next: Phase 0b (fix list below), after the open questions are answered.
+- Phase 0 approved. User decisions: build B2–B5 **before** B12; **do not push** until the whole project is finished
+  (local commits only); a live preview is wanted (`.claude/launch.json` → `madrasa-app`, http://localhost:8443).
+- Phase 0b **in progress**: fixes 1 and 2 done (commit "fix: baseline gaps (routing, offline homework audio)").
+  Fixes 3 and 4 are still to do.
+- **New top priority (user, 2026-11-08): full design overhaul** — user finds the current UI generic / "AI-looking".
+  Do this next, before fixes 3–4 and before B2–B5. Get the design direction approved first, then apply to every screen.
 
 ### Baseline checks (2026-11-08)
 
@@ -74,9 +79,9 @@ format OK (oxfmt, no config file — harmless warning) · tsc OK · test **9 fil
 
 ## Phase 0b — fix list (each with a test)
 
-1. Routing: unknown student/staff ID → not-found state; unknown route → not-found; keep role on refresh
+1. DONE — Routing: unknown student/staff ID → not-found state; unknown route → not-found; keep role on refresh
    (e.g. `?role=` in the hash or sessionStorage) so deep links reopen as the same role.
-2. Homework offline audio: store the recording in IndexedDB with status "এখনো পাঠানো হয়নি"; it survives reload
+2. DONE (metadata in localStorage via `src/homework-outbox.ts`; real audio Blob would go to IndexedDB) — Homework offline audio: store the recording in IndexedDB with status "এখনো পাঠানো হয়নি"; it survives reload
    and offline; sends on reconnect; idempotent (no double submission). Domain test for the queue.
 3. Move own-profile and last-Institution-Admin rules into the resolver (`resolveStaffPermission`) + tests.
 4. Approval risk level in the domain (e.g. exception or above a threshold = high risk → no one-click/bulk,
@@ -84,16 +89,17 @@ format OK (oxfmt, no config file — harmless warning) · tsc OK · test **9 fil
 
 ## Phase plan (each ends with format + tsc + test + build passing, a commit, and an update here)
 
-| Phase | Scope                                                                                                                       |
-| ----- | --------------------------------------------------------------------------------------------------------------------------- |
-| 0b    | Fix list above. Commit `fix: baseline gaps before B12`                                                                      |
-| 1     | B12 exams, marks entry, result publishing (S17, S18) — new                                                                  |
-| 2     | B13 guardian home (S26) — exists; check against task prompt, fill gaps + tests                                              |
-| 3     | B16 system states + subscription modes — exists; same                                                                       |
-| 4     | B14 question bank + paper builder (S33) — exists; same                                                                      |
-| 5     | B15 settings + permissions (S30) — exists; same                                                                             |
-| 6     | E2E journeys, T01–T30 mapping, consistency (inline role checks), a11y, responsive, code split, `docs/handoff.md`            |
-| ?     | B1 route + B2 login, B3 dashboard, B4 teacher Today/attendance, B5 Hifz — not in the task prompt; waiting for user decision |
+| Phase | Scope                                                                                                            |
+| ----- | ---------------------------------------------------------------------------------------------------------------- |
+| 0b    | Fix list above. Commit `fix: baseline gaps before B12`                                                           |
+| 1     | B12 exams, marks entry, result publishing (S17, S18) — new                                                       |
+| 2     | B13 guardian home (S26) — exists; check against task prompt, fill gaps + tests                                   |
+| 3     | B16 system states + subscription modes — exists; same                                                            |
+| 4     | B14 question bank + paper builder (S33) — exists; same                                                           |
+| 5     | B15 settings + permissions (S30) — exists; same                                                                  |
+| 6     | E2E journeys, T01–T30 mapping, consistency (inline role checks), a11y, responsive, code split, `docs/handoff.md` |
+| D     | Design overhaul of all screens (user request) — next                                                             |
+| 0c    | B1 route + B2 login, B3 dashboard, B4 teacher Today/attendance, B5 Hifz — approved, before B12                   |
 
 ## Screens S01–S38 (PRD ch.12.5)
 
@@ -105,11 +111,9 @@ format OK (oxfmt, no config file — harmless warning) · tsc OK · test **9 fil
 
 ## Open questions (waiting for user)
 
-1. B2–B5 (login, dashboard, teacher Today/attendance, Hifz) do not exist, though the task prompt assumed them done.
-   Build them (as a phase before B12, or after Phase 5), or skip?
-2. Phases 2–5 screens already have first versions. OK to treat those phases as "check + fill gaps" rather than rebuild?
-3. Publish the built prototype on GitHub Pages at `/HQSM/app/`? (Mock data only.)
+1. Phases 2–5 screens already have first versions. OK to treat those phases as "check + fill gaps" rather than rebuild?
+2. GitHub Pages for the app: later — nothing is pushed until the project is finished.
 
 ## Test count
 
-54 (9 files) — 2026-11-08 baseline.
+64 (11 files) — 2026-11-08 after 0b fixes 1–2 (baseline was 54).

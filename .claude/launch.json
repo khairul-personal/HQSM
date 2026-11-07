@@ -1,6 +1,12 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "hqsm", "runtimeExecutable": "python", "runtimeArgs": ["-m", "http.server", "5500"], "port": 5500 }
+    { "name": "hqsm", "runtimeExecutable": "python", "runtimeArgs": ["-m", "http.server", "5500"], "port": 5500 },
+    {
+      "name": "madrasa-app",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["-y", "pnpm@10", "--dir", "app", "dev", "--host", "127.0.0.1"],
+      "port": 8443
+    }
   ]
 }

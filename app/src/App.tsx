@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createHashRouter, redirect, RouterProvider, useLocation, useNavigate } from "react-router";
 import {
   AlertCircle,
@@ -66,6 +66,7 @@ import SystemStatesReview, {
 import {
   appRoutes,
   guardianHomePath,
+  isKnownRoute,
   isSectionPath,
   sectionPath,
   resultStudentIdFromPath,
@@ -76,6 +77,7 @@ import {
   type AppSection,
 } from "./app-routes";
 import { staffRecords, type StaffRecord } from "./staff-data";
+import { browserSessionStorage, loadStoredRole, storeRole } from "./prototype-role";
 import {
   prototypeRoles,
   resolveStudentPermission,
@@ -263,6 +265,21 @@ const students: Student[] = [
     avatarTone: "mint",
   },
 ];
+
+/** Students enrolled from the admission pipeline in this prototype; opened by ID, not listed. */
+const newlyEnrolled: Record<string, Student> = {
+  "HQ-2026-00123": {
+    ...students[0],
+    id: "HQ-2026-00123",
+    nameBn: "আয়েশা সিদ্দিকা",
+    nameEn: "Ayesha Siddika",
+    initials: "আসি",
+    gender: "বালিকা",
+    sponsored: false,
+    guardianPhone: "01638-442108",
+    enrolledBy: "EMP-ADMISSION-001",
+  },
+};
 
 const filters = ["শাখা", "ক্লাস", "সেকশন", "হালাকা", "স্ট্যাটাস", "লিঙ্গ", "আবাসিক", "স্পন্সরড"];
 const columns = ["হালাকা", "রোল", "স্ট্যাটাস", "উপস্থিতি", "বকেয়া", "ফ্ল্যাগ"];
@@ -1230,15 +1247,18 @@ function StudentList({
 
 function Application() {
   const { pathname: route } = useLocation();
-  const [role, setRole] = useState<PrototypeRole>(() =>
-    isSectionPath(route, "examPapers")
-      ? "exam-controller"
-      : isSectionPath(route, "guardian") || isSectionPath(route, "results")
-        ? "guardian"
-        : isSectionPath(route, "homework")
-          ? "class-teacher"
-          : "finance-lead",
+  const [role, setRole] = useState<PrototypeRole>(
+    () =>
+      loadStoredRole(browserSessionStorage()) ??
+      (isSectionPath(route, "examPapers")
+        ? "exam-controller"
+        : isSectionPath(route, "guardian") || isSectionPath(route, "results")
+          ? "guardian"
+          : isSectionPath(route, "homework")
+            ? "class-teacher"
+            : "finance-lead"),
   );
+  useEffect(() => storeRole(browserSessionStorage(), role), [role]);
   const navigate = useNavigate();
   const navigateToSection = (section: AppSection) => {
     if (
@@ -1257,17 +1277,12 @@ function Application() {
   const resultStudentId = resultStudentIdFromPath(route);
   const studentId = studentIdFromPath(route) || resultStudentId;
   const openStudent: Student | undefined = studentId
-    ? (students.find((student) => student.id === studentId) ?? {
-        ...students[0],
-        id: studentId,
-        nameBn: "আয়েশা সিদ্দিকা",
-        nameEn: "Ayesha Siddika",
-        initials: "আসি",
-        gender: "বালিকা",
-        guardianPhone: "01638-442108",
-        enrolledBy: "EMP-ADMISSION-001",
-      })
+    ? (students.find((student) => student.id === studentId) ?? newlyEnrolled[studentId])
     : undefined;
+  const notFound =
+    !isKnownRoute(route) ||
+    (studentId !== "" && openStudent === undefined) ||
+    (staffId !== "" && openStaff === undefined);
   const staffSection = isSectionPath(route, "staff");
   const admissionSection = isSectionPath(route, "admissions");
   const feeSection = isSectionPath(route, "fees");
@@ -1281,7 +1296,16 @@ function Application() {
   return (
     <>
       <SubscriptionChrome />
-      {settingsSection ? (
+      {notFound ? (
+        <AppShell role={role} setRole={setRole} onNavigate={navigateToSection}>
+          <SystemState
+            kind="not-found"
+            onAction={() =>
+              navigate(isSectionPath(route, "staff") ? appRoutes.staff : appRoutes.students)
+            }
+          />
+        </AppShell>
+      ) : settingsSection ? (
         <AppShell
           role={role}
           setRole={setRole}

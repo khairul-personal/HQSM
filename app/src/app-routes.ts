@@ -43,6 +43,14 @@ export function resultPath(studentId: string): string {
   return `${appRoutes.results}/${encodeURIComponent(studentId)}`;
 }
 
+/** True when the pathname belongs to a known section (or is the root redirect). */
+export function isKnownRoute(pathname: string): boolean {
+  if (pathname === "/" || pathname === "") return true;
+  return (Object.keys(appRoutes) as AppSection[]).some((section) =>
+    isSectionPath(pathname, section),
+  );
+}
+
 export function isSectionPath(pathname: string, section: AppSection): boolean {
   const base = sectionPath(section);
   return pathname === base || pathname.startsWith(`${base}/`);

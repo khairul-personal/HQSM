@@ -10,6 +10,7 @@ import {
   LoaderCircle,
   LockKeyhole,
   RefreshCcw,
+  SearchX,
   ShieldAlert,
   WifiOff,
   type LucideIcon,
@@ -21,7 +22,13 @@ import {
 } from "./subscription-domain";
 import "./system-states.css";
 
-export type SystemStateKind = "empty" | "loading" | "error" | "offline" | "no-permission";
+export type SystemStateKind =
+  | "empty"
+  | "loading"
+  | "error"
+  | "offline"
+  | "no-permission"
+  | "not-found";
 
 const defaults: Record<
   SystemStateKind,
@@ -56,6 +63,12 @@ const defaults: Record<
     title: "এই তথ্য দেখার অনুমতি নেই",
     message: "প্রয়োজনে প্রতিষ্ঠানের Admin-এর সঙ্গে যোগাযোগ করুন।",
     action: "ফিরে যান",
+  },
+  "not-found": {
+    icon: SearchX,
+    title: "এই ঠিকানায় কিছু পাওয়া যায়নি",
+    message: "লিংকটি পুরোনো বা ভুল হতে পারে। তালিকা থেকে আবার খুঁজুন।",
+    action: "তালিকায় ফিরুন",
   },
 };
 

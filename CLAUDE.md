@@ -13,7 +13,8 @@ Static school website (HTML/CSS/JS, English only). Contact forms use `mailto:` (
 
 ## GitHub
 - Repo: https://github.com/khairul-personal/HQSM (public since 2026-11-08), branch `main`.
-- Commit and push after changes: `git add -A && git commit -m "..." && git push`.
+- Commit after changes. **Do NOT push** until the madrasa app (`app/`) project is finished (user, 2026-11-08) — local commits only.
+- App preview: `.claude/launch.json` → `madrasa-app` (Vite dev server, http://localhost:8443).
 
 ## Status
 - 2026-11-08: put under git, pushed to GitHub, repo made public, GitHub Pages turned on.

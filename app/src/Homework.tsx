@@ -50,6 +50,16 @@ import {
   type PrototypeRole,
 } from "./student-permissions";
 import { SystemState, useSubscription } from "./SystemStates";
+import {
+  discardQueued,
+  findOutboxItem,
+  flushOutbox,
+  loadOutbox,
+  queueSubmission,
+  saveOutbox,
+  type OutboxItem,
+  type OutboxStorage,
+} from "./homework-outbox";
 import "./homework.css";
 
 type HomeworkKind = "লিখিত" | "ফাইল" | "অডিও" | "অফলাইন";
@@ -833,17 +843,54 @@ function GuardianHeader({
   );
 }
 
+function browserLocalStorage(): OutboxStorage | undefined {
+  try {
+    return typeof window === "undefined" ? undefined : window.localStorage;
+  } catch {
+    return undefined;
+  }
+}
+
+function useOnline() {
+  const [online, setOnline] = useState(() =>
+    typeof navigator === "undefined" ? true : navigator.onLine,
+  );
+  useEffect(() => {
+    const update = () => setOnline(navigator.onLine);
+    window.addEventListener("online", update);
+    window.addEventListener("offline", update);
+    return () => {
+      window.removeEventListener("online", update);
+      window.removeEventListener("offline", update);
+    };
+  }, []);
+  return online;
+}
+
 function UploadBox({
+  studentId,
+  homeworkId,
   demoState,
   setDemoState,
 }: {
+  studentId: string;
+  homeworkId: string;
   demoState: DemoState;
   setDemoState: (state: DemoState) => void;
 }) {
+  const [outbox, setOutbox] = useState<OutboxItem[]>(() => loadOutbox(browserLocalStorage()));
+  const savedItem = findOutboxItem(outbox, studentId, homeworkId);
+  const queued = savedItem?.status === "queued";
+  const online = useOnline();
+  const offline = demoState === "offline" || !online;
   const [recording, setRecording] = useState(false);
   const [paused, setPaused] = useState(false);
-  const [recorded, setRecorded] = useState(false);
-  const [seconds, setSeconds] = useState(0);
+  const [recorded, setRecorded] = useState(queued);
+  const [seconds, setSeconds] = useState(queued ? savedItem.durationSeconds : 0);
+  const updateOutbox = (next: OutboxItem[]) => {
+    setOutbox(next);
+    saveOutbox(browserLocalStorage(), next);
+  };
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState("");
@@ -871,6 +918,25 @@ function UploadBox({
     window.setTimeout(() => setProgress(100), 650);
   };
 
+  // Connection back: send the queued recording once (flush skips anything already sent).
+  useEffect(() => {
+    if (offline || !queued) return;
+    let cancelled = false;
+    void flushOutbox(
+      outbox,
+      async () => {
+        performUpload();
+        return true;
+      },
+      () => new Date().toISOString(),
+    ).then((next) => {
+      if (!cancelled) updateOutbox(next);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [offline, queued]);
+
   const submit = () => {
     const validation = validateSubmissionFile({
       kind: "audio",
@@ -881,7 +947,18 @@ function UploadBox({
       setError(validation.message);
       return;
     }
-    if (demoState === "offline") return;
+    if (offline) {
+      updateOutbox(
+        queueSubmission(outbox, {
+          studentId,
+          homeworkId,
+          durationSeconds: seconds || 98,
+          sizeBytes: Math.round(1.8 * 1024 * 1024),
+          recordedAt: new Date().toISOString(),
+        }),
+      );
+      return;
+    }
     if (demoState === "upload-failed") {
       setProgress(42);
       return;
@@ -955,6 +1032,7 @@ function UploadBox({
               setRecorded(false);
               setSeconds(0);
               setProgress(0);
+              updateOutbox(discardQueued(outbox, studentId, homeworkId));
             }}
           >
             <RefreshCcw size={14} /> আবার
@@ -996,12 +1074,16 @@ function UploadBox({
           <AlertCircle size={15} /> {error}
         </p>
       )}
-      {demoState === "offline" && recorded && (
-        <div className="queued-note">
+      {queued && (
+        <div className="queued-note" role="status">
           <WifiOff size={17} />
           <span>
             <b>এখনো পাঠানো হয়নি</b>
-            <small>রেকর্ডিং এই ডিভাইসে রাখা আছে এবং পাঠানোর জন্য queued।</small>
+            <small>
+              {offline
+                ? "রেকর্ডিং এই ফোনে রাখা আছে। ইন্টারনেট ফিরলে নিজে থেকেই পাঠানো হবে।"
+                : "পাঠানো হচ্ছে…"}
+            </small>
           </span>
         </div>
       )}
@@ -1120,7 +1202,12 @@ function GuardianPortal({
                 </p>
               )}
             </section>
-            <UploadBox demoState={demoState} setDemoState={setDemoState} />
+            <UploadBox
+              studentId={childId}
+              homeworkId={homeworkId ?? item?.id ?? ""}
+              demoState={demoState}
+              setDemoState={setDemoState}
+            />
             <section className="guardian-feedback">
               <span>শিক্ষকের ফিডব্যাক · আগের জমা</span>
               <div>
