@@ -9,14 +9,14 @@ Static school website (HTML/CSS/JS, English only). Contact forms use `mailto:` (
 - Local preview: `.claude/launch.json` → `python -m http.server 5500`.
 
 ## GitHub
-- Repo: https://github.com/khairul-personal/HQSM (private), branch `main`.
+- Repo: https://github.com/khairul-personal/HQSM (public since 2026-11-08), branch `main`.
 - Commit and push after changes: `git add -A && git commit -m "..." && git push`.
 
 ## Status
-- 2026-11-08: put under git and pushed to GitHub.
+- 2026-11-08: put under git, pushed to GitHub, repo made public, GitHub Pages turned on.
 
 ## Next step
-- Not decided. (GitHub Pages hosting would need a public repo or a paid plan.)
+- Live site (GitHub Pages, from `main` root): https://khairul-personal.github.io/HQSM/ — every push to main redeploys.
 
 ## Rules
 - Use the real crest, its colours and real school content. No generic one-pagers.
