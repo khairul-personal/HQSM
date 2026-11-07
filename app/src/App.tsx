@@ -86,6 +86,7 @@ import {
 } from "./student-permissions";
 import "./design-system.css";
 import "./student-list.css";
+import "./theme.css";
 
 type ViewState = "ready" | "loading" | "empty" | "offline" | "denied";
 type Status = "সক্রিয়" | "ছুটিতে" | "স্থগিত";
@@ -969,10 +970,10 @@ function StudentList({
                         <th>ID</th>
                         <th>ক্লাস / সেকশন</th>
                         {showCol("হালাকা") && <th>হালাকা</th>}
-                        {showCol("রোল") && <th>রোল</th>}
+                        {showCol("রোল") && <th className="num-col">রোল</th>}
                         {showCol("স্ট্যাটাস") && <th>স্ট্যাটাস</th>}
                         {showCol("উপস্থিতি") && <th>এই মাসে হাজিরা</th>}
-                        {showCol("বকেয়া") && <th>বকেয়া</th>}
+                        {showCol("বকেয়া") && <th className="num-col">বকেয়া</th>}
                         {showCol("ফ্ল্যাগ") && <th>ফ্ল্যাগ</th>}
                         <th />
                       </tr>
