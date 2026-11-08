@@ -21,7 +21,7 @@ Read this at the start of every session. Update it after every phase.
   lines. Checked in the preview at 1440px and 360px (no page-level sideways scroll on any section).
   Small open design items: student-profile attendance heatmap shows day status by colour only on phones; Arabic
   inside Bengali homework titles has no Arabic font; approval cards have no "who requested" line (no data);
-  guardian logout is icon-only. `hifz.css`/`teacher.css` are unused, kept for B4/B5.
+  guardian logout is icon-only. `hifz.css` is unused, kept for B5.
 - Phase 0b **DONE** (all 4 fixes).
 - Phase 0c (B1 route + B2 login, B3 dashboard, B4 teacher Today/attendance, B5 Hifz), in 4 commits:
   - 0c-1 **DONE**: `#/login` (B2, `Login.tsx` + `auth-domain.ts`, 11 tests): phone OTP, password, 2FA required for
