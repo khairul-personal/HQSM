@@ -640,8 +640,19 @@ export function resolveWorkspacePermission(context: PermissionContext): Workspac
 /** Where each role lands right after sign-in (B2). */
 export function homeSectionForRole(
   role: PrototypeRole,
-): "students" | "homework" | "guardian" | "fees" | "staff" | "admissions" | "examPapers" {
+):
+  | "dashboard"
+  | "students"
+  | "homework"
+  | "guardian"
+  | "fees"
+  | "staff"
+  | "admissions"
+  | "examPapers" {
   switch (role) {
+    case "admin":
+    case "muhtamim":
+      return "dashboard";
     case "guardian":
       return "guardian";
     case "class-teacher":

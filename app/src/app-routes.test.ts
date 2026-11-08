@@ -38,6 +38,7 @@ describe("hash route paths", () => {
 
   it("keeps every app section in the same path scheme", () => {
     expect(Object.values(appRoutes)).toEqual([
+      "/dashboard",
       "/sponsorships",
       "/fees",
       "/admissions",

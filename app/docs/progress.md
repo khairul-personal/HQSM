@@ -29,7 +29,13 @@ Read this at the start of every session. Update it after every phase.
     `homeSectionForRole` (resolver). `#/` now redirects to `#/login`. `#/design-system` (B1) standalone, staff only
     (`resolveWorkspacePermission`). Sidebar has a "Prototype" group + sign-out. Demo accounts in the labelled
     Prototype panel on the login page. Shared display helpers for new screens: `src/bn-format.ts`.
-  - **Next:** 0c-2 B3 dashboard, then 0c-3 B4, 0c-4 B5.
+  - 0c-2 **DONE**: `#/dashboard` (B3, `Dashboard.tsx` + `dashboard-domain.ts` + demo `dashboard-data.ts`, 14 tests).
+    Greeting, Gregorian + Hijri date, branch/session filter (girls' branch absent without access). 9 cards per PRD
+    ch.3, each with "সর্বশেষ হালনাগাদ" and a detail list; Prototype switch for loading / no data / data unavailable;
+    no-permission state for other roles. Cards per role from `resolveDashboardPermission` (Admin/মুহতামিম all;
+    Academic Admin no money cards; Finance Lead no academic cards). Admin and মুহতামিম now land on the dashboard;
+    sidebar "ওভারভিউ" opens it. Fixed demo "today" = 2026-11-08 09:40, cutoff 09:00. Checked at 1440px and 360px.
+  - **Next:** 0c-3 B4 teacher Today + attendance, then 0c-4 B5.
 
 ### Baseline checks (2026-11-08)
 
@@ -51,7 +57,7 @@ format OK (oxfmt, no config file — harmless warning) · tsc OK · test **9 fil
 | ----------------------------- | ----------------------------- | -------------------------------------------------------------------------------------- |
 | B1 design system              | `#/design-system`             | Routed (0c-1), standalone page                                                         |
 | B2 login                      | `#/login`                     | Done (0c-1)                                                                            |
-| B3 dashboard                  | —                             | **Missing** (`#/` redirects to `#/sponsorships`)                                       |
+| B3 dashboard                  | `#/dashboard`                 | Done (0c-2)                                                                            |
 | B4 teacher Today + attendance | —                             | **Missing** (only orphan CSS)                                                          |
 | B5 Hifz entry + progress      | —                             | **Missing** (only a tab inside the student profile)                                    |
 | B6a student list              | `#/students`                  | Done                                                                                   |
@@ -127,4 +133,4 @@ format OK (oxfmt, no config file — harmless warning) · tsc OK · test **9 fil
 
 ## Test count
 
-89 (12 files) — 2026-11-08 after Phase 0c-1 (baseline was 54).
+103 (13 files) — 2026-11-08 after Phase 0c-2 (baseline was 54).

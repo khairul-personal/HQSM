@@ -57,6 +57,7 @@ import GuardianHome from "./GuardianHome";
 import ExamPaperBuilder from "./ExamPaperBuilder";
 import InstitutionSettings from "./InstitutionSettings";
 import Login from "./Login";
+import Dashboard from "./Dashboard";
 import DesignSystemPage from "./DesignSystemPage";
 import { InstitutionSettingsProvider, useInstitutionSettings } from "./InstitutionSettingsContext";
 import { isPhotoVisible } from "./settings-domain";
@@ -330,7 +331,10 @@ function AppShell({
           <PanelLeftClose size={16} />
         </div>
         <nav aria-label="প্রধান নেভিগেশন">
-          <button>
+          <button
+            className={activeSection === "dashboard" ? "active" : ""}
+            onClick={() => onNavigate?.("dashboard")}
+          >
             <LayoutDashboard size={18} />
             <span>ওভারভিউ</span>
           </button>
@@ -1275,13 +1279,15 @@ function Application() {
   const [role, setRole] = useState<PrototypeRole>(
     () =>
       loadStoredRole(browserSessionStorage()) ??
-      (isSectionPath(route, "examPapers")
-        ? "exam-controller"
-        : isSectionPath(route, "guardian") || isSectionPath(route, "results")
-          ? "guardian"
-          : isSectionPath(route, "homework")
-            ? "class-teacher"
-            : "finance-lead"),
+      (isSectionPath(route, "dashboard")
+        ? "muhtamim"
+        : isSectionPath(route, "examPapers")
+          ? "exam-controller"
+          : isSectionPath(route, "guardian") || isSectionPath(route, "results")
+            ? "guardian"
+            : isSectionPath(route, "homework")
+              ? "class-teacher"
+              : "finance-lead"),
   );
   useEffect(() => storeRole(browserSessionStorage(), role), [role]);
   const navigate = useNavigate();
@@ -1319,6 +1325,7 @@ function Application() {
   const settingsSection = isSectionPath(route, "settings");
   const loginSection = isSectionPath(route, "login");
   const designSystemSection = isSectionPath(route, "designSystem");
+  const dashboardSection = isSectionPath(route, "dashboard");
 
   return (
     <>
@@ -1353,6 +1360,15 @@ function Application() {
             <SystemState kind="no-permission" />
           </AppShell>
         )
+      ) : dashboardSection ? (
+        <AppShell
+          role={role}
+          setRole={setRole}
+          activeSection="dashboard"
+          onNavigate={navigateToSection}
+        >
+          <Dashboard role={role} />
+        </AppShell>
       ) : settingsSection ? (
         <AppShell
           role={role}

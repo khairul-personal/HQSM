@@ -16,3 +16,25 @@ export const clock = (minutes: number): string =>
   bn(
     `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`,
   );
+
+/** Gregorian date in Bengali, e.g. "রবিবার, ৮ নভেম্বর ২০২৬". */
+export const gregorianDate = (iso: string): string =>
+  new Intl.DateTimeFormat("bn-BD", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${iso}T00:00:00Z`));
+
+/** Hijri (Umm al-Qura) date in Bengali. */
+export function hijriDate(iso: string): string {
+  const parts = new Intl.DateTimeFormat("bn-BD-u-ca-islamic-umalqura", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).formatToParts(new Date(`${iso}T00:00:00Z`));
+  const part = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+  return `${part("day")} ${part("month")} ${part("year")} হিজরি`;
+}

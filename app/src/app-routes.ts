@@ -1,4 +1,5 @@
 export const appRoutes = {
+  dashboard: "/dashboard",
   sponsorships: "/sponsorships",
   fees: "/fees",
   admissions: "/admissions",
