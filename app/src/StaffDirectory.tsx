@@ -327,7 +327,7 @@ export default function StaffDirectory({
                           <b className="class-name">{staff.designation}</b>
                           <small className="section-name">{staff.department}</small>
                         </td>
-                        {show("শাখা") && <td>{staff.branch}</td>}
+                        {show("শাখা") && <td className="nowrap">{staff.branch}</td>}
                         {show("ক্লাস লোড") && (
                           <td>
                             <b>{bn(staff.weeklyLoad)}</b> <small>পিরিয়ড</small>

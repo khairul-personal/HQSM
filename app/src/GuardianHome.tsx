@@ -392,10 +392,14 @@ export default function GuardianHome({
               <span>আসসালামু আলাইকুম</span>
               <h1>{data.name.split(" ").slice(-1)[0]}র আজকের খবর</h1>
             </section>
-            <article className="gp-card attendance">
+            <article className={`gp-card attendance ${data.attendance.status}`}>
               <header>
                 <span>
-                  <CheckCircle2 size={20} />
+                  {data.attendance.status === "unmarked" ? (
+                    <Clock3 size={20} />
+                  ) : (
+                    <CheckCircle2 size={20} />
+                  )}
                 </span>
                 <div>
                   <small>আজকের হাজিরা</small>

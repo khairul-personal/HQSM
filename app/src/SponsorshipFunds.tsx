@@ -568,6 +568,7 @@ export default function SponsorshipFunds({ role }: { role: PrototypeRole }) {
                           placeholder="ফেরত পাঠানোর কারণ লিখুন (আবশ্যক)"
                         />
                         <button
+                          className="ds-button primary"
                           disabled={!reason.trim()}
                           onClick={() => {
                             setAllocations((current) => current.filter((a) => a.id !== item.id));
@@ -585,7 +586,7 @@ export default function SponsorshipFunds({ role }: { role: PrototypeRole }) {
                     {check.ok && permission.canApproveAllocations ? (
                       <button
                         disabled={state === "offline"}
-                        className="approve"
+                        className="ds-button primary approve"
                         onClick={() => approve(item)}
                       >
                         <Check size={14} /> অনুমোদন
@@ -593,7 +594,7 @@ export default function SponsorshipFunds({ role }: { role: PrototypeRole }) {
                     ) : isException && permission.canApproveExceptions ? (
                       <button
                         disabled={state === "offline"}
-                        className="exception"
+                        className="ds-button secondary exception"
                         onClick={() => {
                           const value = window.prompt("ব্যতিক্রমের কারণ লিখুন");
                           if (value) approve(item, value);
@@ -602,11 +603,16 @@ export default function SponsorshipFunds({ role }: { role: PrototypeRole }) {
                         <ShieldAlert size={14} /> ব্যতিক্রম অনুমোদন
                       </button>
                     ) : (
-                      <button disabled title={!check.ok ? check.message : "অনুমতি নেই"}>
+                      <button
+                        className="ds-button secondary"
+                        disabled
+                        title={!check.ok ? check.message : "অনুমতি নেই"}
+                      >
                         অনুমোদন
                       </button>
                     )}
                     <button
+                      className="ds-button secondary"
                       disabled={state === "offline" || !permission.canApproveAllocations}
                       onClick={() => setSendBack(item.id)}
                     >

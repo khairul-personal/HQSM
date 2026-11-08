@@ -364,7 +364,7 @@ export default function InstitutionSettings({ role }: { role: PrototypeRole }) {
                         }
                       />
                     </label>
-                    <span className="live-rule">
+                    <span className="live-rule ds-badge success">
                       <Check size={12} /> B10 live
                     </span>
                   </div>

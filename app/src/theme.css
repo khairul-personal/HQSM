@@ -61,7 +61,8 @@
   --topbar-h: 64px;
 }
 
-:root[data-theme="dark"] {
+:root[data-theme="dark"],
+[data-theme="dark"] {
   --primary: #3fa57d;
   --primary-hover: #52b78f;
   --primary-soft: #173328;
@@ -891,7 +892,8 @@ kbd,
   --frame-muted: rgb(255 255 255 / 0.55);
   --frame-accent: #d9ae5c;
 }
-:root[data-theme="dark"] {
+:root[data-theme="dark"],
+[data-theme="dark"] {
   --frame: #0e1a15;
 }
 
@@ -961,4 +963,55 @@ kbd,
 .sidebar-profile .ds-avatar {
   background: var(--frame-active);
   color: #fff;
+}
+
+/* Touch targets: every shared button is at least 44px tall on phones */
+@media (max-width: 760px) {
+  .ds-button {
+    min-height: 44px;
+  }
+}
+
+/* Small shared helpers */
+td.nowrap {
+  white-space: nowrap;
+}
+.profile-tabs {
+  scrollbar-width: none;
+}
+.profile-tabs::-webkit-scrollbar {
+  display: none;
+}
+.ds-table-tools button {
+  white-space: nowrap;
+}
+
+/* Phone top bar and search row: nothing may run past the right edge */
+@media (max-width: 760px) {
+  .student-topbar {
+    gap: var(--s2);
+  }
+  .role-switcher {
+    min-width: 0;
+    flex: 0 1 auto;
+    padding-left: var(--s2);
+  }
+  .role-switcher span {
+    display: none;
+  }
+  .role-switcher select {
+    min-width: 0;
+    max-width: 128px;
+    text-overflow: ellipsis;
+  }
+  .search-and-mobile-filter {
+    min-width: 0;
+  }
+  .search-and-mobile-filter .student-search {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .mobile-filter-button {
+    flex: 0 0 auto;
+  }
 }

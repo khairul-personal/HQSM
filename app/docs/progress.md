@@ -17,14 +17,14 @@ Read this at the start of every session. Update it after every phase.
   (local commits only); a live preview is wanted (`.claude/launch.json` → `madrasa-app`, http://localhost:8443).
 - Phase 0b **in progress**: fixes 1 and 2 done (commit "fix: baseline gaps (routing, offline homework audio)").
   Fixes 3 and 4 are still to do.
-- Design overhaul — diagnosis: 600+ CSS rules use 7–12px text (spec: Bengali ≥ 15px, line-height ≥ 1.6) and the
-  CSS holds 330 different hex colours (spec: 12 tokens), spread over 17 per-screen files.
-  Foundation: `src/theme.css` (all tokens + shared button/badge/shell/table styles, loaded last). **Pilot done:**
-  app shell + student list. Look chosen by user: **deep green frame** (dark green sidebar `--frame`, gold
-  `--frame-accent` for the active item, light content). Waiting for user approval of the pilot look, then roll out screen by screen
-  (rewrite each screen's CSS onto the tokens, delete its old rules). Mobile cards still need the rollout.
-- **New top priority (user, 2026-11-08): full design overhaul** — user finds the current UI generic / "AI-looking".
-  Do this next, before fixes 3–4 and before B2–B5. Get the design direction approved first, then apply to every screen.
+- **Design overhaul DONE (2026-11-08).** Look: deep green frame (user choice). Rules: `docs/design-rollout.md`;
+  single token source: `src/theme.css`. Every screen stylesheet rewritten onto tokens (no raw hex except `#fff`
+  on green; Bengali text ≥ 15px; shared `.ds-button`/`.ds-badge`; 44px touch targets on phones). CSS 21.3k → 17.3k
+  lines. Checked in the preview at 1440px and 360px (no page-level sideways scroll on any section).
+  Small open design items: student-profile attendance heatmap shows day status by colour only on phones; Arabic
+  inside Bengali homework titles has no Arabic font; approval cards have no "who requested" line (no data);
+  guardian logout is icon-only. `hifz.css`/`teacher.css` are unused, kept for B4/B5.
+- **Next:** Phase 0b fixes 3 and 4, then B1 route + B2–B5 (before B12).
 
 ### Baseline checks (2026-11-08)
 
@@ -104,7 +104,7 @@ format OK (oxfmt, no config file — harmless warning) · tsc OK · test **9 fil
 | 4     | B14 question bank + paper builder (S33) — exists; same                                                           |
 | 5     | B15 settings + permissions (S30) — exists; same                                                                  |
 | 6     | E2E journeys, T01–T30 mapping, consistency (inline role checks), a11y, responsive, code split, `docs/handoff.md` |
-| D     | Design overhaul of all screens (user request) — next                                                             |
+| D     | Design overhaul of all screens (user request) — DONE                                                             |
 | 0c    | B1 route + B2 login, B3 dashboard, B4 teacher Today/attendance, B5 Hifz — approved, before B12                   |
 
 ## Screens S01–S38 (PRD ch.12.5)

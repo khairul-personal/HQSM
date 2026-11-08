@@ -377,7 +377,7 @@ function ReviewDetail({
             {application.className} · {application.branch} · {application.gender}
           </p>
         </div>
-        <span className={`ad-status ${application.status.toLowerCase()}`}>
+        <span className={`ds-badge ad-status ${application.status.toLowerCase()}`}>
           {application.status}
         </span>
       </div>
@@ -388,8 +388,10 @@ function ReviewDetail({
             <b>সম্ভাব্য ডুপ্লিকেট পাওয়া গেছে</b>
             <p>নাম, জন্মতারিখ ও অভিভাবকের ফোন একটি বিদ্যমান শিক্ষার্থী/আবেদনের সাথে মিলেছে।</p>
           </div>
-          <button>দেখুন</button>
-          <button onClick={() => setConfirmedDifferent(true)}>ভিন্ন শিক্ষার্থী নিশ্চিত করুন</button>
+          <button className="ds-button secondary">দেখুন</button>
+          <button className="ds-button secondary" onClick={() => setConfirmedDifferent(true)}>
+            ভিন্ন শিক্ষার্থী নিশ্চিত করুন
+          </button>
         </div>
       )}
       <div className="ad-review-grid">
@@ -965,7 +967,9 @@ export default function AdmissionPipeline({
                   <span>
                     <Clock3 size={13} /> {app.age}
                   </span>
-                  <span className={`ad-status ${app.status.toLowerCase()}`}>{app.status}</span>
+                  <span className={`ds-badge ad-status ${app.status.toLowerCase()}`}>
+                    {app.status}
+                  </span>
                   <ArrowRight size={16} />
                 </button>
               ))}

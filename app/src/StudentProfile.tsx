@@ -499,8 +499,15 @@ function FeesTab({ student }: { student: ProfileStudent }) {
               <span>{detail}</span>
               <b>{amount}</b>
               <em
-                className={status === "বকেয়া" ? "due" : status.startsWith("ফান্ড") ? "fund" : "paid"}
+                className={`ds-badge ${
+                  status === "বকেয়া"
+                    ? "danger due"
+                    : status.startsWith("ফান্ড")
+                      ? "info fund"
+                      : "success paid"
+                }`}
               >
+                <i className="status-dot" />
                 {status}
               </em>
               <button aria-label={`${id} দেখুন`}>

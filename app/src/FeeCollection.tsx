@@ -54,21 +54,57 @@ const invoices: Invoice[] = [
     period: "জানুয়ারি ২০২৬",
     age: "৬০+ দিন",
     overdue: true,
-    lines: [{ head: "মাসিক ফি", charge: 1000, waiver: 100, fund: 0, paid: 600, due: 300 }],
+    lines: [
+      {
+        head: "মাসিক ফি",
+        charge: 1000,
+        waiver: 100,
+        fund: 0,
+        paid: 600,
+        due: 300,
+      },
+    ],
   },
   {
     id: "INV-2026-0412",
     period: "ফেব্রুয়ারি ২০২৬",
     age: "৩১–৬০ দিন",
     overdue: true,
-    lines: [{ head: "মাসিক ফি", charge: 1200, waiver: 0, fund: 900, paid: 0, due: 300 }],
+    lines: [
+      {
+        head: "মাসিক ফি",
+        charge: 1200,
+        waiver: 0,
+        fund: 900,
+        paid: 0,
+        due: 300,
+      },
+    ],
   },
 ];
 
 const recentStudents = [
-  { id: "STU-10241", name: "মুহাম্মদ আব্দুল্লাহ", meta: "হিফজ · ক · রোল ৪", initials: "মআ", due: 600 },
-  { id: "STU-10240", name: "ফাতিমা তুয যাহরা", meta: "নূরানী · খ · রোল ১২", initials: "ফয", due: 0 },
-  { id: "STU-10239", name: "আহমাদ বিন হাসান", meta: "মিশকাত · ক · রোল ৭", initials: "আহ", due: 4000 },
+  {
+    id: "STU-10241",
+    name: "মুহাম্মদ আব্দুল্লাহ",
+    meta: "হিফজ · ক · রোল ৪",
+    initials: "মআ",
+    due: 600,
+  },
+  {
+    id: "STU-10240",
+    name: "ফাতিমা তুয যাহরা",
+    meta: "নূরানী · খ · রোল ১২",
+    initials: "ফয",
+    due: 0,
+  },
+  {
+    id: "STU-10239",
+    name: "আহমাদ বিন হাসান",
+    meta: "মিশকাত · ক · রোল ৭",
+    initials: "আহ",
+    due: 4000,
+  },
 ];
 
 function InvoiceCard({
@@ -90,7 +126,7 @@ function InvoiceCard({
           <code>{invoice.id}</code>
           <b>{invoice.period}</b>
         </div>
-        <span className={`fee-age ${invoice.overdue ? "overdue" : ""}`}>
+        <span className={`ds-badge fee-age ${invoice.overdue ? "danger overdue" : "neutral"}`}>
           {invoice.overdue && <AlertCircle size={13} />} {invoice.age}
         </span>
       </header>
@@ -127,7 +163,7 @@ function InvoiceCard({
             }
           />
         </label>
-        {manual && <em>ম্যানুয়াল</em>}
+        {manual && <em className="ds-badge info">ম্যানুয়াল</em>}
       </footer>
     </article>
   );
@@ -172,7 +208,7 @@ function Receipt({
               80mm
             </button>
           </div>
-          <button onClick={onClose} aria-label="বন্ধ করুন">
+          <button className="icon-button" onClick={onClose} aria-label="বন্ধ করুন">
             <X size={20} />
           </button>
         </header>
@@ -360,7 +396,7 @@ export default function FeeCollection({ role }: { role: PrototypeRole }) {
           <span>বকেয়া পর্যালোচনা, পেমেন্ট গ্রহণ ও রসিদ</span>
         </div>
         <div className="fee-head-actions">
-          <label className="fee-demo-state">
+          <label className="state-switcher fee-demo-state">
             ডেমো
             <select
               value={deskState}
@@ -434,7 +470,10 @@ export default function FeeCollection({ role }: { role: PrototypeRole }) {
             <CheckCircle2 size={14} /> অনুমোদিত যাকাত স্পন্সরশিপ · ৭৫%
           </span>
         )}
-        <button className="student-receipt-link" onClick={() => setReceipt(true)}>
+        <button
+          className="ds-button secondary student-receipt-link"
+          onClick={() => setReceipt(true)}
+        >
           <ReceiptText size={14} /> সর্বশেষ রসিদ
         </button>
         <div className="student-due">
@@ -622,21 +661,21 @@ export default function FeeCollection({ role }: { role: PrototypeRole }) {
           <span>{pending ? "২" : "১"}</span>
         </header>
         <div>
-          <span className="pending-method">bKash</span>
+          <span className="ds-badge info pending-method">bKash</span>
           <b>TRX-8K29P4</b>
           <span>ফাতিমা তুয যাহরা</span>
           <strong>৳ ২,৫০০</strong>
-          <em>
+          <em className="ds-badge warning">
             <Clock3 size={13} /> যাচাই বাকি
           </em>
         </div>
         {pending && (
           <div>
-            <span className="pending-method">Wallet</span>
+            <span className="ds-badge info pending-method">Wallet</span>
             <b>{reference}</b>
             <span>{selected.name}</span>
             <strong>৳ {money(amount)}</strong>
-            <em>
+            <em className="ds-badge warning">
               <Clock3 size={13} /> যাচাই বাকি
             </em>
           </div>
@@ -659,7 +698,7 @@ export default function FeeCollection({ role }: { role: PrototypeRole }) {
                 <small>পোস্ট করার আগে</small>
                 <h2 id="review-title">পেমেন্ট পর্যালোচনা</h2>
               </div>
-              <button onClick={() => setReview(false)} aria-label="বন্ধ করুন">
+              <button className="icon-button" onClick={() => setReview(false)} aria-label="বন্ধ করুন">
                 <X size={20} />
               </button>
             </header>
@@ -767,10 +806,10 @@ export default function FeeCollection({ role }: { role: PrototypeRole }) {
               <small>একটি পেমেন্ট ও একটি রসিদ তৈরি হয়েছে</small>
             </span>
           </div>
-          <button onClick={() => setReceipt(true)}>
+          <button className="ds-button secondary" onClick={() => setReceipt(true)}>
             <ReceiptText size={15} /> রসিদ দেখুন
           </button>
-          <button className="danger" onClick={() => setReverseOpen(true)}>
+          <button className="ds-button danger" onClick={() => setReverseOpen(true)}>
             <RotateCcw size={15} /> Reverse
           </button>
         </section>
@@ -787,7 +826,11 @@ export default function FeeCollection({ role }: { role: PrototypeRole }) {
                 <small>রসিদ মোছা যাবে না</small>
                 <h2>পেমেন্ট Reverse</h2>
               </div>
-              <button onClick={() => setReverseOpen(false)}>
+              <button
+                className="icon-button"
+                onClick={() => setReverseOpen(false)}
+                aria-label="বন্ধ করুন"
+              >
                 <X size={20} />
               </button>
             </header>
@@ -845,7 +888,11 @@ export default function FeeCollection({ role }: { role: PrototypeRole }) {
                 <small>২৬ মার্চ ২০২৬ · Day shift</small>
                 <h2>ক্যাশিয়ার ক্লোজ</h2>
               </div>
-              <button onClick={() => setCloseOpen(false)}>
+              <button
+                className="icon-button"
+                onClick={() => setCloseOpen(false)}
+                aria-label="বন্ধ করুন"
+              >
                 <X size={20} />
               </button>
             </header>
