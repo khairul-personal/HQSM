@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
+  homeSectionForRole,
   prototypeRoles,
+  resolveWorkspacePermission,
   resolveAdmissionPermission,
   resolveFeePermission,
   resolveRestrictedModulePermission,
@@ -133,5 +135,17 @@ describe("staff account actions", () => {
   it("shows no account actions to roles that do not manage staff", () => {
     const officer = prototypeRoles["admission-officer"].context;
     expect(resolveStaffAccountActions(teacher, staff, officer).show).toBe(false);
+  });
+});
+
+describe("workspace access and sign-in landing (Phase 0c)", () => {
+  it("hides the design system page from guardians only", () => {
+    expect(resolveWorkspacePermission(prototypeRoles.guardian.context).designSystem).toBe(false);
+    expect(resolveWorkspacePermission(prototypeRoles.muhtamim.context).designSystem).toBe(true);
+  });
+  it("sends each role to its own home after sign-in", () => {
+    expect(homeSectionForRole("guardian")).toBe("guardian");
+    expect(homeSectionForRole("class-teacher")).toBe("homework");
+    expect(homeSectionForRole("cashier")).toBe("fees");
   });
 });

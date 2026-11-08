@@ -964,6 +964,29 @@ kbd,
   background: var(--frame-active);
   color: #fff;
 }
+.student-sidebar nav[aria-label="Prototype"] {
+  flex: none;
+  padding-top: 0;
+  border-top: 1px dashed var(--frame-line);
+}
+.sidebar-signout {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  border: 0;
+  border-radius: var(--r-input);
+  background: transparent;
+  cursor: pointer;
+}
+.sidebar-signout:hover {
+  background: var(--frame-raised);
+}
+.sidebar-signout:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--frame-accent);
+}
 
 /* Touch targets: every shared button is at least 44px tall on phones */
 @media (max-width: 760px) {

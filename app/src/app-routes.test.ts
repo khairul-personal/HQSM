@@ -49,6 +49,8 @@ describe("hash route paths", () => {
       "/results",
       "/exam-papers",
       "/settings",
+      "/login",
+      "/design-system",
     ]);
     expect(isSectionPath("/students/STU-10241", "students")).toBe(true);
     expect(isSectionPath("/student-settings", "students")).toBe(false);

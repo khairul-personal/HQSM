@@ -627,3 +627,35 @@ export function resolveStaffAccountActions(
   }
   return { show: true, allowed: true };
 }
+
+export type WorkspacePermission = {
+  /** B1 token sheet: staff only, never guardians. */
+  designSystem: boolean;
+};
+
+export function resolveWorkspacePermission(context: PermissionContext): WorkspacePermission {
+  return { designSystem: context.role !== "guardian" };
+}
+
+/** Where each role lands right after sign-in (B2). */
+export function homeSectionForRole(
+  role: PrototypeRole,
+): "students" | "homework" | "guardian" | "fees" | "staff" | "admissions" | "examPapers" {
+  switch (role) {
+    case "guardian":
+      return "guardian";
+    case "class-teacher":
+      return "homework";
+    case "cashier":
+    case "finance-lead":
+      return "fees";
+    case "hr-officer":
+      return "staff";
+    case "admission-officer":
+      return "admissions";
+    case "exam-controller":
+      return "examPapers";
+    default:
+      return "students";
+  }
+}

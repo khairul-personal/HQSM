@@ -10,6 +10,8 @@ export const appRoutes = {
   results: "/results",
   examPapers: "/exam-papers",
   settings: "/settings",
+  login: "/login",
+  designSystem: "/design-system",
 } as const;
 
 export type AppSection = keyof typeof appRoutes;

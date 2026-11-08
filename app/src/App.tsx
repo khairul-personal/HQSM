@@ -43,6 +43,8 @@ import {
   WifiOff,
   X,
   type LucideIcon,
+  LogOut,
+  Palette,
 } from "lucide-react";
 import StudentProfile from "./StudentProfile";
 import StaffDirectory from "./StaffDirectory";
@@ -54,6 +56,8 @@ import Homework from "./Homework";
 import GuardianHome from "./GuardianHome";
 import ExamPaperBuilder from "./ExamPaperBuilder";
 import InstitutionSettings from "./InstitutionSettings";
+import Login from "./Login";
+import DesignSystemPage from "./DesignSystemPage";
 import { InstitutionSettingsProvider, useInstitutionSettings } from "./InstitutionSettingsContext";
 import { isPhotoVisible } from "./settings-domain";
 import SystemStatesReview, {
@@ -79,8 +83,10 @@ import {
 import { staffRecords, type StaffRecord } from "./staff-data";
 import { browserSessionStorage, loadStoredRole, storeRole } from "./prototype-role";
 import {
+  homeSectionForRole,
   prototypeRoles,
   resolveStudentPermission,
+  resolveWorkspacePermission,
   staffRoleKeys,
   type PrototypeRole,
 } from "./student-permissions";
@@ -412,13 +418,31 @@ function AppShell({
             <span>সেটিংস</span>
           </button>
         </nav>
+        <nav aria-label="Prototype">
+          <p>Prototype</p>
+          <button
+            className={activeSection === "designSystem" ? "active" : ""}
+            onClick={() => onNavigate?.("designSystem")}
+          >
+            <Palette size={18} />
+            <span>ডিজাইন সিস্টেম</span>
+          </button>
+        </nav>
         <div className="sidebar-profile">
           <span className="ds-avatar small">রা</span>
           <div>
             <b>রাশেদ আহমেদ</b>
             <small>একাডেমিক অ্যাডমিন</small>
           </div>
-          <MoreHorizontal size={17} />
+          <button
+            type="button"
+            className="sidebar-signout"
+            aria-label="সাইন আউট"
+            title="সাইন আউট"
+            onClick={() => onNavigate?.("login")}
+          >
+            <LogOut size={17} />
+          </button>
         </div>
       </aside>
       <section className="student-workspace">
@@ -1293,11 +1317,26 @@ function Application() {
   const systemStatesSection = isSectionPath(route, "systemStates");
   const examPapersSection = isSectionPath(route, "examPapers");
   const settingsSection = isSectionPath(route, "settings");
+  const loginSection = isSectionPath(route, "login");
+  const designSystemSection = isSectionPath(route, "designSystem");
 
   return (
     <>
-      <SubscriptionChrome />
-      {notFound ? (
+      {!loginSection && <SubscriptionChrome />}
+      {loginSection ? (
+        <Login
+          onSignedIn={(membership) => {
+            setRole(membership.role);
+            storeRole(browserSessionStorage(), membership.role);
+            try {
+              browserSessionStorage()?.setItem("madrasa.institution", membership.institutionId);
+            } catch {
+              // storage blocked: institution falls back to the default
+            }
+            navigate(sectionPath(homeSectionForRole(membership.role)), { replace: true });
+          }}
+        />
+      ) : notFound ? (
         <AppShell role={role} setRole={setRole} onNavigate={navigateToSection}>
           <SystemState
             kind="not-found"
@@ -1306,6 +1345,14 @@ function Application() {
             }
           />
         </AppShell>
+      ) : designSystemSection ? (
+        resolveWorkspacePermission(prototypeRoles[role].context).designSystem ? (
+          <DesignSystemPage onClose={() => navigate(sectionPath(homeSectionForRole(role)))} />
+        ) : (
+          <AppShell role={role} setRole={setRole} onNavigate={navigateToSection}>
+            <SystemState kind="no-permission" />
+          </AppShell>
+        )
       ) : settingsSection ? (
         <AppShell
           role={role}
@@ -1436,7 +1483,7 @@ function Application() {
 const router = createHashRouter([
   {
     path: "/",
-    loader: () => redirect(appRoutes.sponsorships),
+    loader: () => redirect(appRoutes.login),
   },
   {
     path: "*",

@@ -22,7 +22,14 @@ Read this at the start of every session. Update it after every phase.
   Small open design items: student-profile attendance heatmap shows day status by colour only on phones; Arabic
   inside Bengali homework titles has no Arabic font; approval cards have no "who requested" line (no data);
   guardian logout is icon-only. `hifz.css`/`teacher.css` are unused, kept for B4/B5.
-- Phase 0b **DONE** (all 4 fixes). **Next:** Phase 0c — B1 route + B2 login, B3 dashboard, B4 teacher Today/attendance, B5 Hifz (before B12).
+- Phase 0b **DONE** (all 4 fixes).
+- Phase 0c (B1 route + B2 login, B3 dashboard, B4 teacher Today/attendance, B5 Hifz), in 4 commits:
+  - 0c-1 **DONE**: `#/login` (B2, `Login.tsx` + `auth-domain.ts`, 11 tests): phone OTP, password, 2FA required for
+    privileged roles, 5 wrong tries → 15 min lock, 60 s resend, institution picker, lands on
+    `homeSectionForRole` (resolver). `#/` now redirects to `#/login`. `#/design-system` (B1) standalone, staff only
+    (`resolveWorkspacePermission`). Sidebar has a "Prototype" group + sign-out. Demo accounts in the labelled
+    Prototype panel on the login page. Shared display helpers for new screens: `src/bn-format.ts`.
+  - **Next:** 0c-2 B3 dashboard, then 0c-3 B4, 0c-4 B5.
 
 ### Baseline checks (2026-11-08)
 
@@ -42,8 +49,8 @@ format OK (oxfmt, no config file — harmless warning) · tsc OK · test **9 fil
 
 | Brief                         | Route                         | State                                                                                  |
 | ----------------------------- | ----------------------------- | -------------------------------------------------------------------------------------- |
-| B1 design system              | none                          | Page exists but has no route → unreachable                                             |
-| B2 login                      | —                             | **Missing**                                                                            |
+| B1 design system              | `#/design-system`             | Routed (0c-1), standalone page                                                         |
+| B2 login                      | `#/login`                     | Done (0c-1)                                                                            |
 | B3 dashboard                  | —                             | **Missing** (`#/` redirects to `#/sponsorships`)                                       |
 | B4 teacher Today + attendance | —                             | **Missing** (only orphan CSS)                                                          |
 | B5 Hifz entry + progress      | —                             | **Missing** (only a tab inside the student profile)                                    |
@@ -120,4 +127,4 @@ format OK (oxfmt, no config file — harmless warning) · tsc OK · test **9 fil
 
 ## Test count
 
-76 (11 files) — 2026-11-08 after Phase 0b (baseline was 54).
+89 (12 files) — 2026-11-08 after Phase 0c-1 (baseline was 54).
