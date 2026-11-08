@@ -916,3 +916,24 @@
     border-bottom: 1px solid var(--border);
   }
 }
+
+/* High-risk approval: icon + text + colour, needs a written review note */
+.sf-risk {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s1) var(--s2);
+  margin-top: var(--s2);
+  padding: var(--s2) var(--s3);
+  border-radius: var(--r-input);
+  background: var(--warning-soft);
+  color: var(--warning);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+.sf-risk b {
+  font-weight: 600;
+}
+.sf-risk span {
+  color: var(--text);
+}

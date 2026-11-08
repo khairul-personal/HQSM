@@ -582,3 +582,48 @@ export function resolveStaffPermission(
     actions: "manage",
   };
 }
+
+export type AccountActionStaff = {
+  id: string;
+  status: string;
+  isCurrentUser?: boolean;
+  institutionAdmin?: boolean;
+};
+
+export type AccountActionDecision = {
+  /** "Access বন্ধ" / "অব্যাহতি শুরু" buttons appear at all. */
+  show: boolean;
+  /** The action may run now. */
+  allowed: boolean;
+  reason?: string;
+};
+
+const inactiveStaffStatuses = ["স্থগিত", "অব্যাহতিপ্রাপ্ত"];
+
+/**
+ * Restricting access or starting separation for a staff member.
+ * - Only roles that manage staff see the actions, and never on their own profile.
+ * - The last active Institution Admin can never be restricted or removed.
+ */
+export function resolveStaffAccountActions(
+  staff: AccountActionStaff,
+  allStaff: AccountActionStaff[],
+  context: PermissionContext,
+): AccountActionDecision {
+  const manage = resolveStaffPermission(staff, context).actions === "manage";
+  if (!manage || staff.isCurrentUser === true) return { show: false, allowed: false };
+  if (inactiveStaffStatuses.includes(staff.status)) {
+    return { show: true, allowed: false, reason: "এই কর্মীর অ্যাক্সেস আগেই বন্ধ আছে" };
+  }
+  const activeAdmins = allStaff.filter(
+    (record) => record.institutionAdmin === true && !inactiveStaffStatuses.includes(record.status),
+  );
+  if (staff.institutionAdmin === true && activeAdmins.length <= 1) {
+    return {
+      show: true,
+      allowed: false,
+      reason: "প্রতিষ্ঠানে অন্তত একজন Institution Admin থাকতে হবে",
+    };
+  }
+  return { show: true, allowed: true };
+}

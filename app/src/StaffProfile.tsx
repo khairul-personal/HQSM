@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 import {
   prototypeRoles,
+  resolveStaffAccountActions,
   resolveStaffPermission,
   type PrototypeRole,
   type StaffPermission,
@@ -631,21 +632,13 @@ export default function StaffProfile({
   };
 
   const inactive = staff.status === "স্থগিত" || staff.status === "অব্যাহতিপ্রাপ্ত";
-  const isOwnProfile = staff.isCurrentUser === true;
-  const isLastInstitutionAdmin =
-    staff.institutionAdmin === true &&
-    staffRecords.filter(
-      (record) =>
-        record.institutionAdmin === true &&
-        record.status !== "স্থগিত" &&
-        record.status !== "অব্যাহতিপ্রাপ্ত",
-    ).length === 1;
+  const accountActions = resolveStaffAccountActions(
+    staff,
+    staffRecords,
+    prototypeRoles[role].context,
+  );
   const handleAccountRestriction = () => {
-    if (isLastInstitutionAdmin) {
-      setAccountActionError("প্রতিষ্ঠানে অন্তত একজন Institution Admin থাকতে হবে");
-      return;
-    }
-    setAccountActionError("");
+    setAccountActionError(accountActions.allowed ? "" : (accountActions.reason ?? ""));
   };
 
   return (
@@ -721,7 +714,7 @@ export default function StaffProfile({
               <button className="ds-button secondary" disabled={inactive}>
                 <MessageSquareText size={15} /> বার্তা
               </button>
-              {!isOwnProfile && (
+              {accountActions.show && (
                 <>
                   <button
                     className="ds-button secondary"

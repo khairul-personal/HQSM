@@ -15,8 +15,6 @@ Read this at the start of every session. Update it after every phase.
 
 - Phase 0 approved. User decisions: build B2–B5 **before** B12; **do not push** until the whole project is finished
   (local commits only); a live preview is wanted (`.claude/launch.json` → `madrasa-app`, http://localhost:8443).
-- Phase 0b **in progress**: fixes 1 and 2 done (commit "fix: baseline gaps (routing, offline homework audio)").
-  Fixes 3 and 4 are still to do.
 - **Design overhaul DONE (2026-11-08).** Look: deep green frame (user choice). Rules: `docs/design-rollout.md`;
   single token source: `src/theme.css`. Every screen stylesheet rewritten onto tokens (no raw hex except `#fff`
   on green; Bengali text ≥ 15px; shared `.ds-button`/`.ds-badge`; 44px touch targets on phones). CSS 21.3k → 17.3k
@@ -24,7 +22,7 @@ Read this at the start of every session. Update it after every phase.
   Small open design items: student-profile attendance heatmap shows day status by colour only on phones; Arabic
   inside Bengali homework titles has no Arabic font; approval cards have no "who requested" line (no data);
   guardian logout is icon-only. `hifz.css`/`teacher.css` are unused, kept for B4/B5.
-- **Next:** Phase 0b fixes 3 and 4, then B1 route + B2–B5 (before B12).
+- Phase 0b **DONE** (all 4 fixes). **Next:** Phase 0c — B1 route + B2 login, B3 dashboard, B4 teacher Today/attendance, B5 Hifz (before B12).
 
 ### Baseline checks (2026-11-08)
 
@@ -89,8 +87,8 @@ format OK (oxfmt, no config file — harmless warning) · tsc OK · test **9 fil
    (e.g. `?role=` in the hash or sessionStorage) so deep links reopen as the same role.
 2. DONE (metadata in localStorage via `src/homework-outbox.ts`; real audio Blob would go to IndexedDB) — Homework offline audio: store the recording in IndexedDB with status "এখনো পাঠানো হয়নি"; it survives reload
    and offline; sends on reconnect; idempotent (no double submission). Domain test for the queue.
-3. Move own-profile and last-Institution-Admin rules into the resolver (`resolveStaffPermission`) + tests.
-4. Approval risk level in the domain (e.g. exception or above a threshold = high risk → no one-click/bulk,
+3. DONE (`resolveStaffAccountActions`) — Move own-profile and last-Institution-Admin rules into the resolver (`resolveStaffPermission`) + tests.
+4. DONE (`approvalRisk`/`checkApproval`: > ৳২,০০০, eligible-use exception, or fund < 10% left = high risk → review note required, never bulk) — Approval risk level in the domain (e.g. exception or above a threshold = high risk → no one-click/bulk,
    needs review + reason) + tests; self-approval rule stays.
 
 ## Phase plan (each ends with format + tsc + test + build passing, a commit, and an update here)
@@ -122,4 +120,4 @@ format OK (oxfmt, no config file — harmless warning) · tsc OK · test **9 fil
 
 ## Test count
 
-64 (11 files) — 2026-11-08 after 0b fixes 1–2 (baseline was 54).
+76 (11 files) — 2026-11-08 after Phase 0b (baseline was 54).

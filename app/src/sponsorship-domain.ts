@@ -106,6 +106,62 @@ export type AllocationJournal = {
   ];
 };
 
+/** One-click / bulk approval is only for amounts up to this (৳২,০০০). */
+export const oneClickLimitPaisa = 2_000_00;
+
+export type ApprovalRisk = { level: "low" | "high"; reasons: string[] };
+
+/**
+ * Low risk = can be approved in one click (and in bulk).
+ * High risk = needs a written review note: big amount, an eligible-use exception,
+ * or the fund dropping below 10% of its current balance.
+ */
+export function approvalRisk(request: AllocationRequest): ApprovalRisk {
+  assertMoney(request.amountPaisa);
+  const reasons: string[] = [];
+  if (!request.fund.eligibleFeeHeads.includes(request.feeHead)) {
+    reasons.push("ফান্ডের অনুমোদিত ব্যবহারের বাইরে");
+  }
+  if (request.amountPaisa > oneClickLimitPaisa) {
+    reasons.push("৳২,০০০-এর বেশি");
+  }
+  const balance = availableFundBalance(request.fund);
+  if (request.amountPaisa <= balance && (balance - request.amountPaisa) * 10 < balance) {
+    reasons.push("ফান্ডে ১০%-এর কম বাকি থাকবে");
+  }
+  return { level: reasons.length ? "high" : "low", reasons };
+}
+
+export type ApprovalCheck =
+  | AllocationCheck
+  | { ok: false; code: "review-required"; message: string; reasons: string[] };
+
+/** Full approval gate: every hard rule, plus a review note for high-risk items. */
+export function checkApproval(
+  request: AllocationRequest,
+  options: {
+    actorId: string;
+    actorRole: PrototypeRole;
+    today: string;
+    exceptionReason?: string;
+    reviewNote?: string;
+  },
+): ApprovalCheck {
+  const check = checkAllocation(request, options);
+  if (!check.ok) return check;
+  const risk = approvalRisk(request);
+  const note = (options.reviewNote ?? options.exceptionReason ?? "").trim();
+  if (risk.level === "high" && !note) {
+    return {
+      ok: false,
+      code: "review-required",
+      message: "বেশি ঝুঁকির অনুরোধ — যাচাই নোট লিখে অনুমোদন করুন",
+      reasons: risk.reasons,
+    };
+  }
+  return check;
+}
+
 export function postAllocation(
   request: AllocationRequest,
   options: {
@@ -113,9 +169,10 @@ export function postAllocation(
     actorRole: PrototypeRole;
     today: string;
     exceptionReason?: string;
+    reviewNote?: string;
   },
 ): { journal: AllocationJournal; balanceAfterPaisa: number; exception: boolean } {
-  const check = checkAllocation(request, options);
+  const check = checkApproval(request, options);
   if (!check.ok) throw new Error(check.message);
   const amount = request.amountPaisa;
   return {
@@ -137,5 +194,10 @@ export function canBulkApprove(
   requests: AllocationRequest[],
   options: { actorId: string; actorRole: PrototypeRole; today: string },
 ): boolean {
-  return requests.length > 0 && requests.every((request) => checkAllocation(request, options).ok);
+  return (
+    requests.length > 0 &&
+    requests.every(
+      (request) => checkAllocation(request, options).ok && approvalRisk(request).level === "low",
+    )
+  );
 }

@@ -5,6 +5,7 @@ import {
   resolveFeePermission,
   resolveRestrictedModulePermission,
   resolveHomeworkPermission,
+  resolveStaffAccountActions,
   resolveStaffPermission,
   resolveStudentPermission,
 } from "./student-permissions";
@@ -92,5 +93,45 @@ describe("cross-role permission boundaries", () => {
     expect(permission.access).toBe("guardian");
     expect(permission.canOpenStudent("STU-10241")).toBe(true);
     expect(permission.canOpenStudent("STU-99999")).toBe(false);
+  });
+});
+
+describe("staff account actions", () => {
+  const admin = prototypeRoles.admin.context;
+  const self = { id: "EMP-024", status: "সক্রিয়", isCurrentUser: true };
+  const soleAdmin = { id: "EMP-019", status: "সক্রিয়", institutionAdmin: true };
+  const teacher = { id: "EMP-042", status: "সক্রিয়" };
+  const staff = [self, soleAdmin, teacher];
+
+  it("hides Access বন্ধ / অব্যাহতি শুরু on your own profile", () => {
+    expect(resolveStaffAccountActions(self, staff, admin).show).toBe(false);
+  });
+
+  it("never lets the last active Institution Admin be removed", () => {
+    const decision = resolveStaffAccountActions(soleAdmin, staff, admin);
+    expect(decision).toMatchObject({ show: true, allowed: false });
+    expect(decision.reason).toContain("Institution Admin");
+  });
+
+  it("allows removing an admin when another active admin remains", () => {
+    const second = { id: "EMP-050", status: "সক্রিয়", institutionAdmin: true };
+    expect(resolveStaffAccountActions(soleAdmin, [...staff, second], admin).allowed).toBe(true);
+  });
+
+  it("does not count a suspended admin as the remaining admin", () => {
+    const suspended = { id: "EMP-050", status: "স্থগিত", institutionAdmin: true };
+    expect(resolveStaffAccountActions(soleAdmin, [...staff, suspended], admin).allowed).toBe(false);
+  });
+
+  it("allows an ordinary staff member to be restricted by a manager", () => {
+    expect(resolveStaffAccountActions(teacher, staff, admin)).toEqual({
+      show: true,
+      allowed: true,
+    });
+  });
+
+  it("shows no account actions to roles that do not manage staff", () => {
+    const officer = prototypeRoles["admission-officer"].context;
+    expect(resolveStaffAccountActions(teacher, staff, officer).show).toBe(false);
   });
 });

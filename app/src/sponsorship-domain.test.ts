@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 import {
   availableFundBalance,
   canBulkApprove,
+  approvalRisk,
   checkAllocation,
+  checkApproval,
   createAllocation,
   postAllocation,
   type AllocationRequest,
@@ -100,5 +102,50 @@ describe("fund allocation rules", () => {
     const credit = journal.entries.reduce((sum, line) => sum + line.creditPaisa, 0);
     expect(journal.allocationId).toBe(base.id);
     expect(debit).toBe(credit);
+  });
+});
+
+describe("approval risk", () => {
+  const roomy = { ...base.fund, balancePaisa: taka(50_000) };
+
+  it("lets a small, eligible request be approved in one click", () => {
+    const request = { ...base, fund: roomy };
+    expect(approvalRisk(request).level).toBe("low");
+    expect(checkApproval(request, finance).ok).toBe(true);
+  });
+
+  it("needs a review note above ৳2,000 and blocks one-click approval", () => {
+    const request = { ...base, amountPaisa: taka(2_400), fund: roomy };
+    const result = checkApproval(request, finance);
+    expect(result).toMatchObject({ ok: false, code: "review-required" });
+    expect(checkApproval(request, { ...finance, reviewNote: "রসিদ ও আবেদন যাচাই করা হয়েছে" }).ok).toBe(
+      true,
+    );
+  });
+
+  it("treats a request that leaves the fund below 10% as high risk", () => {
+    const request = { ...base, amountPaisa: taka(950) };
+    expect(approvalRisk(request).reasons).toContain("ফান্ডে ১০%-এর কম বাকি থাকবে");
+  });
+
+  it("never bulk-approves a high-risk item, even when every hard check passes", () => {
+    const small = { ...base, fund: roomy };
+    const big = { ...base, id: "ALC-2", amountPaisa: taka(2_400), fund: roomy };
+    expect(checkAllocation(big, finance).ok).toBe(true);
+    expect(canBulkApprove([small], finance)).toBe(true);
+    expect(canBulkApprove([small, big], finance)).toBe(false);
+  });
+
+  it("refuses to post a high-risk allocation without a note", () => {
+    const big = { ...base, amountPaisa: taka(2_400), fund: roomy };
+    expect(() => postAllocation(big, finance)).toThrow();
+  });
+
+  it("still blocks self-approval even with a review note", () => {
+    const own = { ...base, amountPaisa: taka(2_400), fund: roomy, creatorId: "EMP-2" };
+    expect(checkApproval(own, { ...finance, reviewNote: "ঠিক আছে" })).toMatchObject({
+      ok: false,
+      code: "self-approval",
+    });
   });
 });

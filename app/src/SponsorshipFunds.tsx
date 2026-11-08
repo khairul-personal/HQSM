@@ -26,7 +26,13 @@ import {
   resolveSponsorshipPermission,
   type PrototypeRole,
 } from "./student-permissions";
-import { canBulkApprove, checkAllocation, type AllocationRequest } from "./sponsorship-domain";
+import {
+  approvalRisk,
+  canBulkApprove,
+  checkAllocation,
+  checkApproval,
+  type AllocationRequest,
+} from "./sponsorship-domain";
 import { SystemState } from "./SystemStates";
 import "./sponsorship-funds.css";
 import { useInstitutionSettings } from "./InstitutionSettingsContext";
@@ -257,6 +263,8 @@ export default function SponsorshipFunds({ role }: { role: PrototypeRole }) {
   const [bulkPreview, setBulkPreview] = useState(false);
   const [sendBack, setSendBack] = useState<string | null>(null);
   const [reason, setReason] = useState("");
+  const [reviewing, setReviewing] = useState<string | null>(null);
+  const [reviewNote, setReviewNote] = useState("");
   const [notice, setNotice] = useState("");
   const actorRole = role;
   const actorId = role === "finance-lead" ? "EMP-FINANCE-1" : "EMP-MUHTAMIM-1";
@@ -289,14 +297,21 @@ export default function SponsorshipFunds({ role }: { role: PrototypeRole }) {
   if (state === "loading" || state === "empty")
     return <StateScreen state={state} onBack={() => setState("ready")} />;
 
-  const approve = (item: (typeof allocations)[number], exceptionReason?: string) => {
-    const result = checkAllocation(item, { ...options, exceptionReason });
+  const approve = (item: (typeof allocations)[number], note?: string) => {
+    const isException = !item.fund.eligibleFeeHeads.includes(item.feeHead);
+    const result = checkApproval(item, {
+      ...options,
+      reviewNote: note,
+      exceptionReason: isException ? note : undefined,
+    });
     if (!result.ok) {
       setNotice(result.message);
       return;
     }
     setAllocations((current) => current.filter((allocation) => allocation.id !== item.id));
     setSelected((current) => current.filter((id) => id !== item.id));
+    setReviewing(null);
+    setReviewNote("");
     setNotice(
       result.exception
         ? "ব্যতিক্রম কারণসহ অনুমোদিত ও balanced journal posted হয়েছে"
@@ -517,13 +532,17 @@ export default function SponsorshipFunds({ role }: { role: PrototypeRole }) {
               const isException = !item.fund.eligibleFeeHeads.includes(item.feeHead);
               const before = item.fund.balancePaisa / 100;
               const after = Math.max(0, before - item.amountPaisa / 100);
+              const risk = approvalRisk(item);
               return (
                 <article className={`sf-approval ${!check.ok ? "has-issue" : ""}`} key={item.id}>
                   <label className="sf-check">
                     <input
                       type="checkbox"
                       checked={selected.includes(item.id)}
-                      disabled={!check.ok}
+                      disabled={!check.ok || risk.level === "high"}
+                      title={
+                        risk.level === "high" ? "বেশি ঝুঁকির অনুরোধ একসাথে অনুমোদন করা যায় না" : undefined
+                      }
                       onChange={(e) =>
                         setSelected((current) =>
                           e.target.checked
@@ -560,6 +579,34 @@ export default function SponsorshipFunds({ role }: { role: PrototypeRole }) {
                       </span>
                       {isException && <i>ব্যতিক্রম প্রয়োজন</i>}
                     </div>
+                    {risk.level === "high" && (
+                      <p className="sf-risk">
+                        <ShieldAlert size={14} />
+                        <b>যাচাই দরকার</b>
+                        <span>{risk.reasons.join(" · ")}</span>
+                      </p>
+                    )}
+                    {reviewing === item.id && (
+                      <div className="sf-reason">
+                        <textarea
+                          value={reviewNote}
+                          onChange={(e) => setReviewNote(e.target.value)}
+                          placeholder={
+                            isException
+                              ? "ব্যতিক্রমের কারণ লিখুন (আবশ্যক)"
+                              : "কী যাচাই করেছেন লিখুন (আবশ্যক)"
+                          }
+                          aria-label="যাচাই নোট"
+                        />
+                        <button
+                          className="ds-button primary"
+                          disabled={!reviewNote.trim() || state === "offline"}
+                          onClick={() => approve(item, reviewNote)}
+                        >
+                          <Check size={14} /> নোটসহ অনুমোদন
+                        </button>
+                      </div>
+                    )}
                     {sendBack === item.id && (
                       <div className="sf-reason">
                         <textarea
@@ -583,7 +630,7 @@ export default function SponsorshipFunds({ role }: { role: PrototypeRole }) {
                     )}
                   </div>
                   <div className="sf-approval-actions">
-                    {check.ok && permission.canApproveAllocations ? (
+                    {check.ok && permission.canApproveAllocations && risk.level === "low" ? (
                       <button
                         disabled={state === "offline"}
                         className="ds-button primary approve"
@@ -591,16 +638,22 @@ export default function SponsorshipFunds({ role }: { role: PrototypeRole }) {
                       >
                         <Check size={14} /> অনুমোদন
                       </button>
-                    ) : isException && permission.canApproveExceptions ? (
+                    ) : (check.ok && permission.canApproveAllocations) ||
+                      (isException &&
+                        permission.canApproveExceptions &&
+                        check.ok === false &&
+                        (check.code === "ineligible" || check.code === "exception-reason")) ? (
                       <button
                         disabled={state === "offline"}
                         className="ds-button secondary exception"
                         onClick={() => {
-                          const value = window.prompt("ব্যতিক্রমের কারণ লিখুন");
-                          if (value) approve(item, value);
+                          setSendBack(null);
+                          setReviewNote("");
+                          setReviewing(reviewing === item.id ? null : item.id);
                         }}
                       >
-                        <ShieldAlert size={14} /> ব্যতিক্রম অনুমোদন
+                        <ShieldAlert size={14} />{" "}
+                        {isException ? "ব্যতিক্রম অনুমোদন" : "যাচাই করে অনুমোদন"}
                       </button>
                     ) : (
                       <button
