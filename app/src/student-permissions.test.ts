@@ -145,7 +145,7 @@ describe("workspace access and sign-in landing (Phase 0c)", () => {
   });
   it("sends each role to its own home after sign-in", () => {
     expect(homeSectionForRole("guardian")).toBe("guardian");
-    expect(homeSectionForRole("class-teacher")).toBe("homework");
+    expect(homeSectionForRole("class-teacher")).toBe("attendance");
     expect(homeSectionForRole("cashier")).toBe("fees");
   });
 });

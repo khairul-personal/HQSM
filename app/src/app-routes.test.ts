@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   appRoutes,
+  registerIdFromPath,
+  registerPath,
   homeworkCheckPath,
   homeworkChildPath,
   guardianHomePath,
@@ -34,11 +36,13 @@ describe("hash route paths", () => {
   it("restores detail IDs from deep-link pathnames", () => {
     expect(staffIdFromPath("/staff/EMP-024")).toBe("EMP-024");
     expect(studentIdFromPath("/students/STU%2010241")).toBe("STU 10241");
+    expect(registerIdFromPath(registerPath("REG-HK-MORNING"))).toBe("REG-HK-MORNING");
   });
 
   it("keeps every app section in the same path scheme", () => {
     expect(Object.values(appRoutes)).toEqual([
       "/dashboard",
+      "/attendance",
       "/sponsorships",
       "/fees",
       "/admissions",

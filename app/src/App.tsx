@@ -58,6 +58,7 @@ import ExamPaperBuilder from "./ExamPaperBuilder";
 import InstitutionSettings from "./InstitutionSettings";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
+import TeacherToday from "./TeacherToday";
 import DesignSystemPage from "./DesignSystemPage";
 import { InstitutionSettingsProvider, useInstitutionSettings } from "./InstitutionSettingsContext";
 import { isPhotoVisible } from "./settings-domain";
@@ -359,9 +360,12 @@ function AppShell({
             <GraduationCap size={18} />
             <span>ক্লাস ও সেকশন</span>
           </button>
-          <button>
+          <button
+            className={activeSection === "attendance" ? "active" : ""}
+            onClick={() => onNavigate?.("attendance")}
+          >
             <IdCard size={18} />
-            <span>হাজিরা</span>
+            <span>আজ · হাজিরা</span>
           </button>
           <button
             className={activeSection === "homework" ? "active" : ""}
@@ -1285,7 +1289,7 @@ function Application() {
           ? "exam-controller"
           : isSectionPath(route, "guardian") || isSectionPath(route, "results")
             ? "guardian"
-            : isSectionPath(route, "homework")
+            : isSectionPath(route, "homework") || isSectionPath(route, "attendance")
               ? "class-teacher"
               : "finance-lead"),
   );
@@ -1326,6 +1330,7 @@ function Application() {
   const loginSection = isSectionPath(route, "login");
   const designSystemSection = isSectionPath(route, "designSystem");
   const dashboardSection = isSectionPath(route, "dashboard");
+  const attendanceSection = isSectionPath(route, "attendance");
 
   return (
     <>
@@ -1368,6 +1373,15 @@ function Application() {
           onNavigate={navigateToSection}
         >
           <Dashboard role={role} />
+        </AppShell>
+      ) : attendanceSection ? (
+        <AppShell
+          role={role}
+          setRole={setRole}
+          activeSection="attendance"
+          onNavigate={navigateToSection}
+        >
+          <TeacherToday role={role} />
         </AppShell>
       ) : settingsSection ? (
         <AppShell

@@ -642,6 +642,7 @@ export function homeSectionForRole(
   role: PrototypeRole,
 ):
   | "dashboard"
+  | "attendance"
   | "students"
   | "homework"
   | "guardian"
@@ -656,7 +657,7 @@ export function homeSectionForRole(
     case "guardian":
       return "guardian";
     case "class-teacher":
-      return "homework";
+      return "attendance";
     case "cashier":
     case "finance-lead":
       return "fees";

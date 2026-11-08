@@ -1,0 +1,730 @@
+/* B4 · Teacher Today + attendance register. Tokens from theme.css only; mobile first. */
+
+.att {
+  display: grid;
+  gap: var(--s4);
+  min-width: 0;
+  padding: var(--s5) var(--s6) var(--s7);
+  font-family: var(--font-bn);
+  color: var(--text);
+}
+
+.att h1,
+.att h2,
+.att h3,
+.att p {
+  margin: 0;
+}
+
+/* ---------- Prototype controls (visibly apart from product UI) ---------- */
+.att-prototype {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s2) var(--s3);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-input);
+  background: var(--surface-sunken);
+  font-size: var(--fs-sm);
+}
+
+.att-prototype > b {
+  font-family: var(--font-latin);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.att-prototype label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+}
+
+.att-prototype select,
+.att-prototype button {
+  min-height: 36px;
+  padding: 0 var(--s3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.att-prototype button.active {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.att-prototype :focus-visible,
+.att-row:focus-visible,
+.att-marks button:focus-visible,
+.att-tasks button:focus-visible,
+.att-check input:focus-visible,
+.att-reason textarea:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+/* ---------- Banners ---------- */
+.att-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s2);
+  padding: var(--s3) var(--s4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-input);
+  font-size: var(--fs-md);
+  line-height: var(--lh-bn);
+}
+
+.att-banner > svg {
+  flex: none;
+  margin-top: 3px;
+}
+
+.att-banner.success {
+  border-color: var(--success);
+  background: var(--success-soft);
+}
+.att-banner.warning {
+  border-color: var(--warning);
+  background: var(--warning-soft);
+}
+.att-banner.info {
+  border-color: var(--info);
+  background: var(--info-soft);
+}
+.att-banner.danger {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
+
+/* ---------- Today (S04) ---------- */
+.att-head h1 {
+  margin: var(--s1) 0;
+  font-size: var(--fs-2xl);
+  line-height: var(--lh-tight);
+}
+
+.att-greeting {
+  color: var(--accent);
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+
+.att-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  color: var(--muted);
+  font-size: var(--fs-md);
+}
+
+.att-tasks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--s3);
+}
+
+.att-tasks > div,
+.att-tasks > button {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  min-height: 56px;
+  padding: var(--s3) var(--s4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-md);
+  text-align: left;
+}
+
+.att-tasks > button {
+  cursor: pointer;
+}
+.att-tasks > button:hover {
+  border-color: var(--primary-line);
+}
+.att-tasks svg {
+  flex: none;
+  color: var(--primary);
+}
+.att-tasks .warning svg {
+  color: var(--warning);
+}
+.att-tasks .danger svg {
+  color: var(--danger);
+}
+.att-tasks .info svg {
+  color: var(--info);
+}
+.att-tasks .success svg {
+  color: var(--success);
+}
+
+.att-section-title {
+  margin: var(--s2) 0 var(--s3) !important;
+  font-size: var(--fs-lg);
+}
+
+.att-schedule {
+  display: grid;
+  gap: var(--s3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.att-card {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--s4);
+  padding: var(--s4);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
+  border-radius: var(--r-card);
+  background: var(--surface);
+}
+
+.att-card.open {
+  border-left-color: var(--info);
+}
+.att-card.due-soon {
+  border-left-color: var(--warning);
+}
+.att-card.overdue {
+  border-left-color: var(--danger);
+}
+.att-card.submitted {
+  border-left-color: var(--success);
+}
+.att-card.upcoming {
+  background: var(--surface-sunken);
+}
+
+.att-time {
+  padding-right: var(--s3);
+  border-right: 1px solid var(--border);
+  text-align: center;
+}
+
+.att-time b,
+.att-time small {
+  display: block;
+}
+
+.att-time b {
+  font-family: var(--font-latin);
+  font-size: var(--fs-lg);
+}
+
+.att-time small {
+  color: var(--muted);
+  font-size: var(--fs-md);
+}
+
+.att-card-body {
+  display: grid;
+  gap: var(--s1);
+  min-width: 0;
+  justify-items: start;
+}
+
+.att-card-body h3 {
+  font-size: var(--fs-lg);
+  line-height: var(--lh-tight);
+}
+
+.att-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s1) var(--s3);
+  color: var(--muted);
+  font-size: var(--fs-md);
+}
+
+.att-meta > span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+}
+
+.att-progress {
+  font-size: var(--fs-md);
+}
+
+.att-card-body .ds-badge,
+.att-reg-head .ds-badge {
+  white-space: normal;
+  text-align: left;
+}
+
+/* ---------- Register (S12) ---------- */
+.att-register {
+  display: grid;
+  gap: var(--s4);
+  padding-bottom: 140px; /* room for the sticky submit bar */
+}
+
+.att-reg-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s3);
+}
+
+.att-reg-head > div {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
+.att-reg-head h1 {
+  font-size: var(--fs-xl);
+  line-height: var(--lh-tight);
+}
+
+.att-back {
+  min-width: 44px;
+  padding: 0;
+}
+
+.att-counts {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--s2);
+  margin: 0;
+}
+
+.att-counts > div {
+  padding: var(--s2) var(--s3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-input);
+  background: var(--surface);
+}
+
+.att-counts dt {
+  color: var(--muted);
+  font-size: var(--fs-md);
+}
+
+.att-counts dd {
+  margin: 0;
+  font-size: var(--fs-xl);
+  font-weight: 700;
+}
+
+.att-counts .present dd {
+  color: var(--success);
+}
+.att-counts .late dd {
+  color: var(--warning);
+}
+.att-counts .absent dd {
+  color: var(--danger);
+}
+.att-counts .leave dd {
+  color: var(--info);
+}
+.att-counts .unmarked {
+  border-style: dashed;
+  border-color: var(--warning);
+}
+
+.att-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s3);
+}
+
+.att-toolbar .ds-button {
+  min-height: 44px;
+}
+
+.att-toolbar .has-unmarked {
+  border-color: var(--warning);
+}
+
+.att-hint {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+.att-hint kbd {
+  padding: 0 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: var(--surface-sunken);
+  font-family: var(--font-latin);
+  font-size: var(--fs-xs);
+}
+
+.att-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  list-style: none;
+  overflow: hidden;
+}
+
+.att-row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--s3);
+  padding: var(--s2) var(--s4);
+  border-top: 1px solid var(--border);
+}
+
+.att-row:first-child {
+  border-top: 0;
+}
+
+/* Unmarked: tinted row + dashed edge + "চিহ্নহীন" text — never colour alone. */
+.att-row.unmarked {
+  background: var(--warning-soft);
+  box-shadow: inset 4px 0 0 var(--warning);
+}
+
+.att-list-empty {
+  padding: var(--s4);
+  color: var(--muted);
+  font-size: var(--fs-md);
+}
+
+.att-avatar {
+  width: 44px;
+  height: 44px;
+  font-size: var(--fs-sm);
+}
+
+.att-avatar.initials {
+  background: var(--surface-sunken);
+  color: var(--muted);
+  border: 1px dashed var(--border-strong);
+}
+
+.att-name {
+  display: grid;
+  min-width: 0;
+}
+
+.att-name b {
+  font-size: var(--fs-base);
+  overflow-wrap: anywhere;
+}
+
+.att-name small {
+  color: var(--muted);
+  font-size: var(--fs-md);
+}
+
+.att-marks {
+  display: inline-flex;
+  gap: var(--s1);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.att-marks legend {
+  margin-bottom: var(--s2);
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+
+.att-marks.wide {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.att-marks button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--s3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-input);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.att-marks button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.att-mark-short {
+  display: none;
+}
+
+.att-marks button.active {
+  color: #fff;
+  font-weight: 600;
+}
+.att-marks button.present.active {
+  border-color: var(--success);
+  background: var(--success);
+}
+.att-marks button.late.active {
+  border-color: var(--warning);
+  background: var(--warning);
+}
+.att-marks button.absent.active {
+  border-color: var(--danger);
+  background: var(--danger);
+}
+.att-marks button.leave.active {
+  border-color: var(--info);
+  background: var(--info);
+}
+
+.att-final {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.att-final .ds-button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+}
+
+.att-sent {
+  padding: var(--s4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  background: var(--surface);
+}
+
+.att-sent h2 {
+  margin-bottom: var(--s2);
+  font-size: var(--fs-base);
+}
+
+.att-sent ul {
+  display: grid;
+  gap: var(--s2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-md);
+  line-height: var(--lh-bn);
+}
+
+.att-sent .ds-badge {
+  margin-right: var(--s2);
+}
+
+.att-submitbar {
+  position: sticky;
+  bottom: 68px; /* clears the fixed Prototype subscription switch (44px + gap) */
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+  padding: var(--s3) var(--s4);
+  border: 1px solid var(--primary-line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-float);
+  font-size: var(--fs-md);
+}
+
+.att-submitbar .ds-button {
+  min-height: 44px;
+}
+
+/* ---------- Summary sheet / correction dialog ---------- */
+.att-sheet-shell {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: var(--s4);
+}
+
+.att-sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(28 36 32 / 0.45);
+}
+
+.att-sheet {
+  position: relative;
+  display: grid;
+  gap: var(--s4);
+  width: min(100%, 520px);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  padding: var(--s5);
+  border-radius: var(--r-modal);
+  background: var(--surface);
+  box-shadow: var(--shadow-float);
+}
+
+.att-sheet > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+}
+
+.att-sheet h2 {
+  margin: 0;
+  font-size: var(--fs-xl);
+}
+
+.att-sheet > header .ds-button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+}
+
+.att-sheet > footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--s3);
+}
+
+.att-sheet > footer .ds-button {
+  min-height: 44px;
+}
+
+.att-counts.compact {
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+}
+
+.att-sheet-block {
+  display: grid;
+  gap: var(--s2);
+  padding: var(--s3) var(--s4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-input);
+  font-size: var(--fs-md);
+  line-height: var(--lh-bn);
+}
+
+.att-sheet-block.warning {
+  border-color: var(--warning);
+  background: var(--warning-soft);
+}
+
+.att-sheet-block ul {
+  margin: 0;
+  padding-left: var(--s5);
+}
+
+.att-sheet-note {
+  color: var(--muted);
+  font-size: var(--fs-md);
+  line-height: var(--lh-bn);
+}
+
+.att-check {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  min-height: 44px;
+  font-weight: 600;
+}
+
+.att-check input {
+  width: 22px;
+  height: 22px;
+}
+
+.att-reason {
+  display: grid;
+  gap: var(--s1);
+  font-size: var(--fs-md);
+}
+
+.att-reason textarea {
+  padding: var(--s2) var(--s3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-input);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  resize: vertical;
+}
+
+.att-error {
+  color: var(--danger);
+  font-size: var(--fs-md);
+}
+
+/* ---------- Phones (360px) ---------- */
+@media (max-width: 720px) {
+  .att {
+    padding: var(--s4) var(--s4) var(--s7);
+  }
+
+  .att-head h1 {
+    font-size: var(--fs-xl);
+  }
+
+  .att-card {
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: var(--s3);
+  }
+
+  .att-card > .ds-button {
+    grid-column: 1 / -1;
+    min-height: 44px;
+  }
+
+  .att-counts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .att-hint {
+    display: none;
+  }
+
+  .att-row {
+    grid-template-columns: 44px minmax(0, 1fr);
+    padding: var(--s3);
+  }
+
+  .att-row > .att-marks,
+  .att-row > .att-final {
+    grid-column: 1 / -1;
+  }
+
+  .att-row > .att-marks {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .att-sheet-shell {
+    place-items: end stretch;
+    padding: 0;
+  }
+
+  .att-sheet {
+    width: 100%;
+    border-radius: var(--r-modal) var(--r-modal) 0 0;
+  }
+}

@@ -35,7 +35,22 @@ Read this at the start of every session. Update it after every phase.
     no-permission state for other roles. Cards per role from `resolveDashboardPermission` (Admin/মুহতামিম all;
     Academic Admin no money cards; Finance Lead no academic cards). Admin and মুহতামিম now land on the dashboard;
     sidebar "ওভারভিউ" opens it. Fixed demo "today" = 2026-11-08 09:40, cutoff 09:00. Checked at 1440px and 360px.
-  - **Next:** 0c-3 B4 teacher Today + attendance, then 0c-4 B5.
+  - 0c-3 **DONE**: `#/attendance` (S04 Today) + `#/attendance/:registerId` (S12 register) — `TeacherToday.tsx` +
+    `attendance-domain.ts` + demo `attendance-data.ts` + `attendance.css` (replaces the unused `teacher.css`), 17 tests.
+    Access from the settings matrix (`resolveAttendancePermission`: attendance view/create) — teacher sees own
+    class/halaqa only, admin all; girls' registers absent without girls' access; photo only if resolver + branch
+    photo policy allow. Cutoff per shift comes from Settings (`attendanceCutoff`), countdown open/due-soon/overdue.
+    One-tap উপস্থিত/দেরি/অনুপস্থিত/ছুটি, "সবাই উপস্থিত" (only fills unmarked; approved leave → ছুটি), unmarked rows
+    highlighted + filter, keyboard 1–4 and ↑↓, summary sheet before submit (unmarked must be confirmed, stays
+    unmarked, no message). Submit idempotent; one guardian message per finalized absent. After submit: correction
+    needs a reason → new version + history, correction message only if Absent involved; locked at ২০:০০.
+    Offline: marks saved as a draft in localStorage, submit queued ("এখনো পাঠানো হয়নি"), survives reload, syncs once
+    on reconnect; a register finalized by another submission → conflict, never overwritten. Class teacher now lands
+    on `#/attendance`. Prototype bar: clock ০৭:৫৫/০৮:৪০, loading/empty/error, offline, demo reset.
+    Checked in the preview at desktop and 360px (no sideways scroll, 44px buttons).
+    Open: Branch Admin finalize of an overdue register and approval of after-lock corrections are not built
+    (domain returns "locked"); real Hifz-session teacher assignment comes from staff data later.
+  - **Next:** 0c-4 B5 Hifz entry + progress.
 
 ### Baseline checks (2026-11-08)
 
@@ -49,7 +64,7 @@ format OK (oxfmt, no config file — harmless warning) · tsc OK · test **9 fil
   `SponsorshipFunds`, `Homework`, `GuardianHome`, `ExamPaperBuilder`, `InstitutionSettings`, `SystemStates`.
 - Domain logic + tests: `finance-domain`, `sponsorship-domain`, `homework-domain`, `guardian-portal-domain`,
   `exam-paper-domain`, `settings-domain`, `subscription-domain`, `student-permissions` (the shared resolver).
-- **Orphans (not routed):** `DesignSystemPage.tsx` (B1), `modules.tsx` (module hub), `hifz.css`, `teacher.css`.
+- **Orphans (not routed):** `modules.tsx` (module hub), `hifz.css` (kept for B5).
 
 ## Phase 0 audit — screens
 
@@ -58,7 +73,7 @@ format OK (oxfmt, no config file — harmless warning) · tsc OK · test **9 fil
 | B1 design system              | `#/design-system`             | Routed (0c-1), standalone page                                                         |
 | B2 login                      | `#/login`                     | Done (0c-1)                                                                            |
 | B3 dashboard                  | `#/dashboard`                 | Done (0c-2)                                                                            |
-| B4 teacher Today + attendance | —                             | **Missing** (only orphan CSS)                                                          |
+| B4 teacher Today + attendance | `#/attendance`, `#/attendance/:id` | Done (0c-3)                                                                       |
 | B5 Hifz entry + progress      | —                             | **Missing** (only a tab inside the student profile)                                    |
 | B6a student list              | `#/students`                  | Done                                                                                   |
 | B6b student profile           | `#/students/:id`              | Done. Bug: an unknown ID shows a made-up record ("আয়েশা সিদ্দিকা") instead of "not found" |
@@ -120,7 +135,7 @@ format OK (oxfmt, no config file — harmless warning) · tsc OK · test **9 fil
 
 ## Screens S01–S38 (PRD ch.12.5)
 
-- Done: S05, S06, S07, S08, S11, S16, S20, S21, S27 (homework part).
+- Done: S04, S12, S05, S06, S07, S08, S11, S16, S20, S21, S27 (homework part).
 - First version, to be completed: S26 (B13), S30 (B15), S33 (B14), B16 states.
 - Missing, in plan: S17, S18 (Phase 1).
 - Missing, not in plan (needs decision): S01, S03, S04, S12, S14, S15.
@@ -133,4 +148,4 @@ format OK (oxfmt, no config file — harmless warning) · tsc OK · test **9 fil
 
 ## Test count
 
-103 (13 files) — 2026-11-08 after Phase 0c-2 (baseline was 54).
+122 (14 files) — 2026-11-08 after Phase 0c-3 (baseline was 54).

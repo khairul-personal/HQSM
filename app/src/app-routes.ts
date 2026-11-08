@@ -1,5 +1,6 @@
 export const appRoutes = {
   dashboard: "/dashboard",
+  attendance: "/attendance",
   sponsorships: "/sponsorships",
   fees: "/fees",
   admissions: "/admissions",
@@ -42,6 +43,10 @@ export function guardianHomePath(studentId: string): string {
   return `${appRoutes.guardian}/${encodeURIComponent(studentId)}`;
 }
 
+export function registerPath(registerId: string): string {
+  return `${appRoutes.attendance}/${encodeURIComponent(registerId)}`;
+}
+
 export function resultPath(studentId: string): string {
   return `${appRoutes.results}/${encodeURIComponent(studentId)}`;
 }
@@ -59,7 +64,10 @@ export function isSectionPath(pathname: string, section: AppSection): boolean {
   return pathname === base || pathname.startsWith(`${base}/`);
 }
 
-function detailId(pathname: string, section: "staff" | "students" | "results"): string {
+function detailId(
+  pathname: string,
+  section: "staff" | "students" | "results" | "attendance",
+): string {
   const base = sectionPath(section);
   if (!pathname.startsWith(`${base}/`)) return "";
   const encodedId = pathname.slice(base.length + 1).split("/")[0] ?? "";
@@ -75,3 +83,5 @@ export const staffIdFromPath = (pathname: string): string => detailId(pathname, 
 export const studentIdFromPath = (pathname: string): string => detailId(pathname, "students");
 
 export const resultStudentIdFromPath = (pathname: string): string => detailId(pathname, "results");
+
+export const registerIdFromPath = (pathname: string): string => detailId(pathname, "attendance");
