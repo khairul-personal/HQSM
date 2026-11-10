@@ -18,6 +18,7 @@ Static school website (HTML/CSS/JS, English only). Contact forms use `mailto:` (
 
 ## Status
 - 2026-11-08: put under git, pushed to GitHub, repo made public, GitHub Pages turned on.
+- 2026-11-10: user asked to push all local commits (up to B4 progress note `136826b`) — pushed. No-push rule still applies to new work unless the user asks again.
 
 ## Next step
 - Live site (GitHub Pages, from `main` root): https://khairul-personal.github.io/HQSM/ — every push to main redeploys.
