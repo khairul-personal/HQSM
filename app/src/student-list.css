@@ -10,22 +10,8 @@
   display: flex;
   min-height: 100vh;
 }
-.student-sidebar {
-  position: sticky;
-  top: 0;
-  display: flex;
-  height: 100vh;
-  flex: 0 0 var(--sidebar-w);
-  flex-direction: column;
-}
-.student-brand,
-.sidebar-profile,
-.student-topbar,
-.institution-picker,
-.branch-picker,
-.privacy-pill,
+
 .state-switcher,
-.role-switcher,
 .page-actions,
 .student-search,
 .saved-views,
@@ -37,75 +23,7 @@
   display: flex;
   align-items: center;
 }
-.student-brand > span,
-.mini-mark {
-  display: grid;
-  flex: 0 0 auto;
-  place-items: center;
-}
-.student-brand > div,
-.sidebar-profile > div {
-  min-width: 0;
-  flex: 1;
-}
-.student-brand b,
-.student-brand small,
-.sidebar-profile b,
-.sidebar-profile small,
-.institution-picker small,
-.institution-picker b,
-.branch-picker small,
-.branch-picker b {
-  display: block;
-  white-space: nowrap;
-  text-align: left;
-}
-.student-sidebar nav {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  overflow-y: auto;
-}
-.student-sidebar nav p:first-of-type {
-  margin-top: var(--s2);
-}
-.student-sidebar nav button {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  border: 0;
-  text-align: left;
-}
-.student-sidebar nav button span {
-  flex: 1;
-}
 
-.student-workspace {
-  min-width: 0;
-  flex: 1;
-}
-.student-topbar {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-}
-.institution-picker > div,
-.branch-picker > div {
-  min-width: 0;
-}
-.institution-picker b,
-.branch-picker b {
-  margin-top: 2px;
-}
-.mini-mark {
-  width: 28px;
-  height: 28px;
-  font-size: var(--fs-xs);
-  font-weight: 700;
-}
-.topbar-spacer {
-  flex: 1;
-}
 .icon-button {
   position: relative;
   display: grid;
@@ -121,10 +39,7 @@
   border: 1px solid;
   border-radius: 50%;
 }
-.mobile-menu {
-  display: none;
-}
-.role-switcher select,
+
 .state-switcher select {
   max-width: 170px;
   outline: 0;
@@ -746,35 +661,9 @@
 
 @media (max-width: 1100px) {
   /* icon rail; extra specificity beats theme.css widths/padding */
-  .student-shell .student-sidebar {
-    width: 72px;
-    flex-basis: 72px;
-  }
-  .student-shell .student-brand {
-    justify-content: center;
-    padding: 0;
-  }
-  .student-brand > div,
-  .student-brand > svg,
-  .student-sidebar nav button span,
-  .student-sidebar nav p,
-  .student-sidebar nav button > b,
-  .sidebar-profile > div,
-  .sidebar-profile > svg,
-  .page-actions .state-switcher,
-  .privacy-pill {
+
+  .page-actions .state-switcher {
     display: none;
-  }
-  .student-shell .student-sidebar nav {
-    padding: var(--s3) var(--s2);
-  }
-  .student-shell .student-sidebar nav button {
-    justify-content: center;
-    padding: 0;
-  }
-  .student-shell .sidebar-profile {
-    justify-content: center;
-    padding: var(--s3) 0;
   }
 }
 
@@ -782,11 +671,6 @@
   .student-shell {
     display: block;
   }
-  .student-sidebar,
-  .branch-picker,
-  .student-topbar > .ds-avatar,
-  .institution-picker .mini-mark,
-  .institution-picker > div small,
   .page-heading > div:first-child > p,
   .page-heading > div:first-child > span,
   .page-actions .secondary,
@@ -797,28 +681,7 @@
   .pagination {
     display: none;
   }
-  .mobile-menu {
-    display: grid;
-    width: 44px;
-    height: 44px;
-    flex: 0 0 auto;
-    place-items: center;
-    border: 1px solid var(--border);
-    border-radius: var(--r-input);
-    background: var(--surface);
-    color: var(--text);
-  }
-  .student-topbar .institution-picker {
-    min-width: 0;
-    height: auto;
-    border: 0;
-    padding: 0;
-  }
-  .student-topbar .institution-picker b {
-    overflow: hidden;
-    font-size: var(--fs-md);
-    text-overflow: ellipsis;
-  }
+
   .page-heading {
     align-items: flex-start;
   }

@@ -62,10 +62,13 @@ export type DashboardPermission = {
   branches: DashboardScope["branch"][];
 };
 
+/** Branch scope options for the shell's scope control; the girls' branch is absent without access. */
+export function resolveScopeBranches(context: PermissionContext): DashboardScope["branch"][] {
+  return context.girlsSectionAccess ? ["all", "boys", "girls"] : ["boys"];
+}
+
 export function resolveDashboardPermission(context: PermissionContext): DashboardPermission {
-  const branches: DashboardScope["branch"][] = context.girlsSectionAccess
-    ? ["all", "boys", "girls"]
-    : ["boys"];
+  const branches = resolveScopeBranches(context);
   switch (context.role) {
     case "admin":
     case "muhtamim":
@@ -471,4 +474,119 @@ export function upcomingEvents(
     .map((e) => ({ ...e, inDays: daysBetween(today, e.date) }))
     .filter((e) => e.inDays >= 0 && e.inDays <= windowDays)
     .sort((a, b) => a.inDays - b.inDays);
+}
+
+// ---------- Redesign (S03 v2): cash view of collection, register coverage, today's work ----------
+
+export type CollectionCash = {
+  /** Money actually received today: fee receipts − fee refunds + donations − donation refunds. */
+  cashPaisa: Paisa;
+  feeReceiptsPaisa: Paisa;
+  feeRefundsPaisa: Paisa;
+  feeNetPaisa: Paisa;
+  donationPaisa: Paisa;
+  /** Internal settlement from a fund — shown apart, never part of cash. */
+  fundAllocationPaisa: Paisa;
+  receiptCount: number;
+  refundCount: number;
+};
+
+/** Posted entries of the day. Fund allocation is an internal settlement, so it is not cash inflow. */
+export function collectionCash(
+  entries: MoneyEntry[],
+  scope: DashboardScope,
+  today: string,
+): CollectionCash {
+  const out: CollectionCash = {
+    cashPaisa: 0,
+    feeReceiptsPaisa: 0,
+    feeRefundsPaisa: 0,
+    feeNetPaisa: 0,
+    donationPaisa: 0,
+    fundAllocationPaisa: 0,
+    receiptCount: 0,
+    refundCount: 0,
+  };
+  for (const entry of entries) {
+    assertPaisa(entry.amountPaisa);
+    if (entry.status !== "posted" || entry.date !== today || !inScope(scope, entry)) continue;
+    const signed = entry.type === "refund" ? -entry.amountPaisa : entry.amountPaisa;
+    if (entry.kind === "fund-allocation") {
+      out.fundAllocationPaisa += signed;
+      continue;
+    }
+    if (entry.type === "refund") out.refundCount += 1;
+    else out.receiptCount += 1;
+    if (entry.kind === "fee") {
+      if (entry.type === "refund") out.feeRefundsPaisa += entry.amountPaisa;
+      else out.feeReceiptsPaisa += entry.amountPaisa;
+      out.feeNetPaisa += signed;
+    } else {
+      out.donationPaisa += signed;
+    }
+    out.cashPaisa += signed;
+  }
+  return out;
+}
+
+/** How many registers the attendance numbers cover (the explicit denominator on the card). */
+export function registerCoverage(
+  registers: AttendanceRegister[],
+  scope: DashboardScope,
+): { registers: number; submitted: number } {
+  const scoped = registers.filter((r) => inScope(scope, r));
+  return { registers: scoped.length, submitted: scoped.filter((r) => r.submitted).length };
+}
+
+export type DashboardTask =
+  | {
+      type: "register";
+      id: string;
+      priority: Priority;
+      register: AttendanceSummary["pendingRegisters"][number];
+    }
+  | { type: "approval"; id: string; priority: Priority; approval: ApprovalRow }
+  | {
+      type: "homework";
+      id: string;
+      priority: Priority;
+      homework: HomeworkStatus["overdue"][number];
+    };
+
+/** Homework late by this many days becomes high priority. */
+export const homeworkHighPriorityDays = 3;
+
+/**
+ * One queue for "আজকের কাজ": registers past the cutoff (always high), approvals (their own priority
+ * and order), then classes with overdue homework. High priority first; order inside a group is kept.
+ */
+export function todayTasks(input: {
+  pendingRegisters?: AttendanceSummary["pendingRegisters"];
+  approvals?: ApprovalRow[];
+  homeworkOverdue?: HomeworkStatus["overdue"];
+}): DashboardTask[] {
+  const tasks: DashboardTask[] = [
+    ...(input.pendingRegisters ?? []).map((register): DashboardTask => ({
+      type: "register",
+      id: `register:${register.id}`,
+      priority: "high",
+      register,
+    })),
+    ...(input.approvals ?? []).map((approval): DashboardTask => ({
+      type: "approval",
+      id: `approval:${approval.id}`,
+      priority: approval.priority,
+      approval,
+    })),
+    ...(input.homeworkOverdue ?? []).map((homework): DashboardTask => ({
+      type: "homework",
+      id: `homework:${homework.id}`,
+      priority: homework.daysLate >= homeworkHighPriorityDays ? "high" : "normal",
+      homework,
+    })),
+  ];
+  return [
+    ...tasks.filter((t) => t.priority === "high"),
+    ...tasks.filter((t) => t.priority === "normal"),
+  ];
 }

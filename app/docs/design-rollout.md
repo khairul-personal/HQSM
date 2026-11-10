@@ -1,3 +1,6 @@
+> **2026-11-10:** superseded for shell, fonts and layout by `.interface-design/system.md` (light Opedia-style frame,
+> Noto Sans Bengali). The deep-green frame below is retired. Keep this file only for per-screen history.
+
 # Design rollout brief — move every screen onto `src/theme.css`
 
 Chosen look (user, 2026-11-08): **deep green frame** — dark green sidebar, gold marks the active item, calm light

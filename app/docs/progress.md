@@ -11,7 +11,27 @@ Read this at the start of every session. Update it after every phase.
   "Download code". Stack: React 19, Vite 8, TS 5.9, Tailwind 4, react-router 7 (`createHashRouter`), Vitest 5, oxfmt.
 - pnpm is not installed globally: run every command as `npx -y pnpm@10 <cmd>` from `app/`.
 
-## Current status (2026-11-08)
+## Redesign pass 1 — shared shell + S03 (2026-11-10) — DONE
+
+- User chose the Opedia light dashboard as the one visual reference (design pack). **The deep-green frame is retired.**
+  Everything is recorded in `.interface-design/system.md` — read it before UI work.
+- New: `src/shell/` (`AppShell`, `shell.css`, `Popover`, `ShellState`, `DevInspector`); `Dashboard.tsx` +
+  `dashboard.css` rewritten; domain: `collectionCash`, `registerCoverage`, `todayTasks`, `resolveScopeBranches`
+  (dashboard-domain), `resolveNavigation` / `resolveBottomNavigation` (student-permissions); tests in
+  `dashboard-redesign.test.ts`. Crest copied to `public/crest.png`. Money now prints "৳ ১২,৩৪৫" (with space).
+- Fonts are now Noto Sans Bengali + Inter for **every** screen (token change). Other screens were only checked for
+  sideways scroll (none at 360 / 1440), not restyled — their 15px text, 700 weights and old spacing remain.
+- Checks: format OK · tsc OK · **134 tests / 15 files** · build OK (746 kB chunk warning, known).
+- Open after this pass:
+  - Scope control drives the dashboard only; other screens still ignore branch/session.
+  - Approve / return from the dashboard is disabled on purpose (no server); review opens the module page.
+  - Notifications centre, English UI, digit-preference setting, "recent activity" feed: not built (no data/setting exists).
+  - Demo attendance covers 5 registers (135 students) while enrolment is 1,243 — labelled on the card, not reconciled.
+  - `student-list.css` / `theme.css` old shell rules were removed; sidebar counts (১৪, ৬, ৩, ৪) are still demo constants.
+  - Next (design pack `prompts/02_visual_review.txt`, then `03_rollout.txt`): user review, then roll the system out to
+    the next screens. B5 Hifz is still the next feature phase.
+
+## Earlier status (2026-11-08)
 
 - Phase 0 approved. User decisions: build B2–B5 **before** B12; **do not push** until the whole project is finished
   (local commits only); a live preview is wanted (`.claude/launch.json` → `madrasa-app`, http://localhost:8443).
@@ -68,25 +88,25 @@ format OK (oxfmt, no config file — harmless warning) · tsc OK · test **9 fil
 
 ## Phase 0 audit — screens
 
-| Brief                         | Route                         | State                                                                                  |
-| ----------------------------- | ----------------------------- | -------------------------------------------------------------------------------------- |
-| B1 design system              | `#/design-system`             | Routed (0c-1), standalone page                                                         |
-| B2 login                      | `#/login`                     | Done (0c-1)                                                                            |
-| B3 dashboard                  | `#/dashboard`                 | Done (0c-2)                                                                            |
-| B4 teacher Today + attendance | `#/attendance`, `#/attendance/:id` | Done (0c-3)                                                                       |
-| B5 Hifz entry + progress      | —                             | **Missing** (only a tab inside the student profile)                                    |
-| B6a student list              | `#/students`                  | Done                                                                                   |
-| B6b student profile           | `#/students/:id`              | Done. Bug: an unknown ID shows a made-up record ("আয়েশা সিদ্দিকা") instead of "not found" |
-| B7 staff                      | `#/staff`, `#/staff/:id`      | Done                                                                                   |
-| B8 admissions                 | `#/admissions`                | Done                                                                                   |
-| B9 fees                       | `#/fees`                      | Done                                                                                   |
-| B10 sponsorship               | `#/sponsorships`              | Done                                                                                   |
-| B11 homework                  | `#/homework/...`              | Done (offline gap, see below)                                                          |
-| B12 exams/marks               | `#/results/:id` = profile tab | **Missing** (no exam setup, marks grid, publish)                                       |
-| B13 guardian                  | `#/guardian/:id`              | First version exists + 4 tests                                                         |
-| B14 question bank             | `#/exam-papers`               | First version exists + 5 tests                                                         |
-| B15 settings                  | `#/settings`                  | First version exists + 5 tests                                                         |
-| B16 system states             | `#/system-states`             | First version exists + 3 tests                                                         |
+| Brief                         | Route                              | State                                                                                  |
+| ----------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------- |
+| B1 design system              | `#/design-system`                  | Routed (0c-1), standalone page                                                         |
+| B2 login                      | `#/login`                          | Done (0c-1)                                                                            |
+| B3 dashboard                  | `#/dashboard`                      | Done (0c-2)                                                                            |
+| B4 teacher Today + attendance | `#/attendance`, `#/attendance/:id` | Done (0c-3)                                                                            |
+| B5 Hifz entry + progress      | —                                  | **Missing** (only a tab inside the student profile)                                    |
+| B6a student list              | `#/students`                       | Done                                                                                   |
+| B6b student profile           | `#/students/:id`                   | Done. Bug: an unknown ID shows a made-up record ("আয়েশা সিদ্দিকা") instead of "not found" |
+| B7 staff                      | `#/staff`, `#/staff/:id`           | Done                                                                                   |
+| B8 admissions                 | `#/admissions`                     | Done                                                                                   |
+| B9 fees                       | `#/fees`                           | Done                                                                                   |
+| B10 sponsorship               | `#/sponsorships`                   | Done                                                                                   |
+| B11 homework                  | `#/homework/...`                   | Done (offline gap, see below)                                                          |
+| B12 exams/marks               | `#/results/:id` = profile tab      | **Missing** (no exam setup, marks grid, publish)                                       |
+| B13 guardian                  | `#/guardian/:id`                   | First version exists + 4 tests                                                         |
+| B14 question bank             | `#/exam-papers`                    | First version exists + 5 tests                                                         |
+| B15 settings                  | `#/settings`                       | First version exists + 5 tests                                                         |
+| B16 system states             | `#/system-states`                  | First version exists + 3 tests                                                         |
 
 ## Phase 0 audit — the 5 earlier fixes
 
@@ -148,4 +168,4 @@ format OK (oxfmt, no config file — harmless warning) · tsc OK · test **9 fil
 
 ## Test count
 
-122 (14 files) — 2026-11-08 after Phase 0c-3 (baseline was 54).
+134 (15 files) — 2026-11-10 after the shell + S03 redesign (was 122 after Phase 0c-3; baseline 54).

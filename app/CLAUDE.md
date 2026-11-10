@@ -10,7 +10,9 @@ Multi-tenant madrasa (Islamic school) management dashboard for Bangladesh. This 
   ch.3 navigation & dashboards (~156) · ch.4 workflows (~200) · ch.5–10 modules M01–M26 (~233–728) ·
   ch.11 full profiles (~729) · ch.12 frontend design spec & screen list S01–S38 (~832) ·
   ch.13 notifications (~977) · ch.15 money & result rules (~1058) · ch.20 acceptance tests T01–T30 (~1181).
-- Visual quality bar, tokens and screen briefs: `docs/design-prompt.md` (Part A = rules, Part B = screens).
+- **Design system (current, wins over older design notes): `.interface-design/system.md`** — light Opedia-style
+  shell, Noto Sans Bengali, tokens, motion, reusable patterns. Read it before any UI work.
+- Older visual bar and screen briefs: `docs/design-prompt.md` (Part A = rules, Part B = screens).
 - Progress log: `docs/progress.md` — read it at the start of every session, update it after every phase.
 - If the PRD and the design prompt disagree, the PRD wins. If anything is ambiguous, ask before building.
 
@@ -34,7 +36,9 @@ Multi-tenant madrasa (Islamic school) management dashboard for Bangladesh. This 
   UI numbers must come from those tested functions, never be recomputed in components.
 - Idempotency: retrying a submit/approve/post never creates a second record.
 - Posted/published/locked records are immutable; corrections create a reversal, adjustment or new version.
-- Prototype-only controls (role switcher, state switcher) are visibly labelled "Prototype" and kept apart from product UI.
+- Test controls (role, subscription mode, data fixtures, offline) live only in the development inspector
+  (`src/shell/DevInspector.tsx`, "DEV" pill). Never put a test control in product UI.
+- Scope (branch + session) comes from the shell's single control (`useShellState`); pages do not add their own.
 
 ## Product rules that are easy to get wrong
 
@@ -51,7 +55,8 @@ Multi-tenant madrasa (Islamic school) management dashboard for Bangladesh. This 
 ## Language, content and design
 
 - Bengali-first UI; English secondary; Arabic/Quranic text RTL with correct harakat.
-- Fonts: Hind Siliguri (BN), Inter (Latin/numerals), Noto Naskh Arabic (AR), Amiri Quran (verses).
+- Fonts: Noto Sans Bengali 400/500/600 (BN letters + digits), Inter (Latin/IDs), Noto Naskh Arabic (AR),
+  Amiri Quran (verses). No Hind Siliguri, no weight 700, no synthetic bold.
 - Bengali digits by default; IDs, phone and receipt numbers in Latin digits.
 - Realistic Bengali sample data only (no lorem ipsum). Respectful, non-blaming microcopy.
 - Every screen: desktop 1440px and mobile 360px (no page-level horizontal scroll); loading, empty, error,

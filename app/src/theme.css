@@ -30,9 +30,20 @@
   --info-soft: #e6eef7;
   --focus: 0 0 0 3px rgb(15 107 74 / 0.28);
 
-  /* Type — Bengali body never below 15px, line-height ≥ 1.6 */
-  --font-bn: "Hind Siliguri", "Noto Sans Bengali", "Nirmala UI", sans-serif;
-  --font-latin: "Inter", "Hind Siliguri", system-ui, sans-serif;
+  /* Text-safe semantic colours: AA (≥ 4.5:1) as small text on white and on their own soft tint */
+  --success-text: #17714a;
+  --warning-text: #8a5200;
+  --danger-text: #a8322c;
+  --info-text: #255e97;
+  --accent-text: #86601a;
+
+  /*
+   * Type — Noto Sans Bengali for Bengali letters and digits (real 400/500/600 only), Inter for Latin.
+   * Inter is listed first so Latin letters, IDs and phone numbers use it; it has no Bengali glyphs,
+   * so every Bengali character falls through to Noto Sans Bengali. No synthetic bold (font-synthesis: none).
+   */
+  --font-bn: "Inter", "Noto Sans Bengali", "Nirmala UI", sans-serif;
+  --font-latin: "Inter", "Noto Sans Bengali", system-ui, sans-serif;
   --font-ar: "Noto Naskh Arabic", serif;
   --fs-xs: 12px; /* Latin-only meta: IDs, kbd hints */
   --fs-sm: 14px; /* secondary lines, table headers */
@@ -44,6 +55,20 @@
   --fs-3xl: 30px;
   --lh-bn: 1.65;
   --lh-tight: 1.3;
+  /* Fixed pairs for the redesigned shell and S03 (size / line height) */
+  --lh-meta: 22px; /* with 14px */
+  --lh-body: 26px; /* with 16px */
+  --lh-title: 28px; /* with 18px */
+  --lh-page: 34px; /* with 24px */
+  --lh-kpi: 40px; /* with 30px */
+
+  /* Motion — one system: colour/opacity 140ms, popovers 160ms, drawers/dialogs 200ms */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --t-fast: 140ms;
+  --t-pop: 160ms;
+  --t-panel: 200ms;
+  --sidebar-w-collapsed: 72px;
+  --content-max: 1440px;
 
   /* Space (4px grid), radius, elevation */
   --s1: 4px;
@@ -171,19 +196,19 @@ kbd,
 }
 .ds-badge.success {
   background: var(--success-soft);
-  color: var(--success);
+  color: var(--success-text);
 }
 .ds-badge.info {
   background: var(--info-soft);
-  color: var(--info);
+  color: var(--info-text);
 }
 .ds-badge.warning {
   background: var(--warning-soft);
-  color: var(--warning);
+  color: var(--warning-text);
 }
 .ds-badge.danger {
   background: var(--danger-soft);
-  color: var(--danger);
+  color: var(--danger-text);
 }
 .ds-badge.neutral {
   background: var(--surface-sunken);
@@ -219,184 +244,6 @@ kbd,
   font-family: var(--font-bn);
 }
 
-.student-sidebar {
-  width: var(--sidebar-w);
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-}
-.student-brand {
-  height: var(--topbar-h);
-  gap: var(--s3);
-  padding: 0 var(--s4);
-  border-bottom: 1px solid var(--border);
-}
-.student-brand > span {
-  width: 36px;
-  height: 36px;
-  border-radius: var(--r-input);
-  background: var(--primary);
-  color: #fff;
-  font: 700 var(--fs-sm) / 1 var(--font-latin);
-  box-shadow: none;
-}
-.student-brand b {
-  font-size: var(--fs-md);
-  font-weight: 700;
-  line-height: var(--lh-tight);
-  color: var(--text);
-}
-.student-brand small {
-  font-size: var(--fs-sm);
-  color: var(--muted);
-  line-height: var(--lh-tight);
-}
-.student-brand svg {
-  color: var(--subtle);
-}
-
-.student-sidebar nav {
-  padding: var(--s3) var(--s3) var(--s4);
-  gap: 2px;
-}
-.student-sidebar nav p {
-  margin: var(--s4) var(--s3) var(--s1);
-  font-size: var(--fs-sm);
-  font-weight: 600;
-  color: var(--subtle);
-  letter-spacing: 0;
-  text-transform: none;
-}
-.student-sidebar nav button {
-  position: relative;
-  min-height: 42px;
-  gap: var(--s3);
-  padding: 0 var(--s3);
-  border-radius: var(--r-input);
-  font-size: var(--fs-md);
-  font-weight: 500;
-  color: var(--muted);
-  background: transparent;
-  box-shadow: none;
-}
-.student-sidebar nav button svg {
-  width: 18px;
-  height: 18px;
-  stroke-width: 1.6;
-  color: var(--subtle);
-}
-.student-sidebar nav button > b {
-  margin-left: auto;
-  min-width: 26px;
-  height: 22px;
-  padding: 0 7px;
-  border-radius: 6px;
-  background: var(--surface-sunken);
-  color: var(--muted);
-  font: 600 var(--fs-xs) / 22px var(--font-bn);
-  text-align: center;
-}
-.student-sidebar nav button:hover {
-  background: var(--surface-sunken);
-  color: var(--text);
-}
-.student-sidebar nav button.active {
-  background: var(--primary-soft);
-  color: var(--primary);
-  font-weight: 600;
-  box-shadow: none;
-}
-.student-sidebar nav button.active svg {
-  color: var(--primary);
-}
-.student-sidebar nav button.active::before {
-  content: "";
-  position: absolute;
-  left: -12px;
-  top: 9px;
-  bottom: 9px;
-  width: 3px;
-  border-radius: 0 3px 3px 0;
-  background: var(--primary);
-}
-.student-sidebar nav button.active > b {
-  background: var(--surface);
-  color: var(--primary);
-}
-.sidebar-profile {
-  gap: var(--s3);
-  padding: var(--s3) var(--s4);
-  border-top: 1px solid var(--border);
-  background: transparent;
-}
-.sidebar-profile b {
-  font-size: var(--fs-md);
-  color: var(--text);
-}
-.sidebar-profile small {
-  font-size: var(--fs-sm);
-  color: var(--muted);
-}
-
-.student-topbar {
-  height: var(--topbar-h);
-  gap: var(--s3);
-  padding: 0 var(--s5);
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  box-shadow: none;
-}
-.institution-picker,
-.branch-picker {
-  height: 44px;
-  gap: var(--s2);
-  padding: 0 var(--s3);
-  border: 1px solid var(--border);
-  border-radius: var(--r-input);
-  background: var(--surface);
-}
-.institution-picker:hover,
-.branch-picker:hover {
-  border-color: var(--border-strong);
-}
-.institution-picker small,
-.branch-picker small {
-  font-size: var(--fs-xs);
-  color: var(--subtle);
-  line-height: 1.2;
-}
-.institution-picker b,
-.branch-picker b {
-  font-size: var(--fs-sm);
-  font-weight: 600;
-  color: var(--text);
-  line-height: 1.3;
-}
-.mini-mark {
-  border-radius: 6px;
-  background: var(--primary);
-  color: #fff;
-  font-family: var(--font-latin);
-}
-.branch-picker em {
-  font-style: normal;
-  font-size: var(--fs-xs);
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 6px;
-  background: var(--accent-soft);
-  color: var(--accent);
-}
-.privacy-pill {
-  height: 32px;
-  gap: 6px;
-  padding: 0 10px;
-  border-radius: 6px;
-  font-size: var(--fs-sm);
-  font-weight: 600;
-  background: var(--warning-soft);
-  color: var(--warning);
-  border: 0;
-}
 .icon-button {
   width: 40px;
   height: 40px;
@@ -415,7 +262,6 @@ kbd,
 }
 
 /* Prototype-only controls: visibly labelled, visually separate from product UI */
-.role-switcher,
 .state-switcher {
   height: 36px;
   gap: var(--s2);
@@ -424,14 +270,12 @@ kbd,
   border-radius: var(--r-input);
   background: var(--surface-sunken);
 }
-.role-switcher span,
 .state-switcher span {
   font: 600 var(--fs-xs) / 1 var(--font-latin);
   color: var(--subtle);
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
-.role-switcher select,
 .state-switcher select {
   font-size: var(--fs-sm);
   font-weight: 600;
@@ -857,9 +701,7 @@ kbd,
   .page-heading h1 {
     font-size: var(--fs-2xl);
   }
-  .student-topbar {
-    padding: 0 var(--s4);
-  }
+
   .list-toolbar {
     padding: var(--s3);
   }
@@ -897,97 +739,6 @@ kbd,
   --frame: #0e1a15;
 }
 
-.student-sidebar {
-  background: var(--frame);
-  border-right: 0;
-  color: var(--frame-text);
-}
-.student-brand {
-  border-bottom-color: var(--frame-line);
-}
-.student-brand > span {
-  background: var(--surface);
-  color: var(--frame);
-}
-.student-brand b {
-  color: #fff;
-}
-.student-brand small,
-.student-brand svg {
-  color: var(--frame-muted);
-}
-.student-sidebar nav p {
-  color: var(--frame-muted);
-}
-.student-sidebar nav button {
-  color: var(--frame-text);
-}
-.student-sidebar nav button svg {
-  color: var(--frame-muted);
-}
-.student-sidebar nav button > b {
-  background: var(--frame-raised);
-  color: var(--frame-text);
-}
-.student-sidebar nav button:hover {
-  background: var(--frame-raised);
-  color: #fff;
-}
-.student-sidebar nav button.active {
-  background: var(--frame-active);
-  color: #fff;
-}
-.student-sidebar nav button.active svg {
-  color: var(--frame-accent);
-}
-.student-sidebar nav button.active::before {
-  background: var(--frame-accent);
-}
-.student-sidebar nav button.active > b {
-  background: var(--frame-accent);
-  color: var(--frame);
-}
-.student-sidebar nav button:focus-visible {
-  box-shadow: 0 0 0 2px var(--frame-accent);
-}
-.sidebar-profile {
-  border-top-color: var(--frame-line);
-}
-.sidebar-profile b {
-  color: #fff;
-}
-.sidebar-profile small,
-.sidebar-profile svg {
-  color: var(--frame-muted);
-}
-.sidebar-profile .ds-avatar {
-  background: var(--frame-active);
-  color: #fff;
-}
-.student-sidebar nav[aria-label="Prototype"] {
-  flex: none;
-  padding-top: 0;
-  border-top: 1px dashed var(--frame-line);
-}
-.sidebar-signout {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  margin-left: auto;
-  border: 0;
-  border-radius: var(--r-input);
-  background: transparent;
-  cursor: pointer;
-}
-.sidebar-signout:hover {
-  background: var(--frame-raised);
-}
-.sidebar-signout:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--frame-accent);
-}
-
 /* Touch targets: every shared button is at least 44px tall on phones */
 @media (max-width: 760px) {
   .ds-button {
@@ -1011,22 +762,6 @@ td.nowrap {
 
 /* Phone top bar and search row: nothing may run past the right edge */
 @media (max-width: 760px) {
-  .student-topbar {
-    gap: var(--s2);
-  }
-  .role-switcher {
-    min-width: 0;
-    flex: 0 1 auto;
-    padding-left: var(--s2);
-  }
-  .role-switcher span {
-    display: none;
-  }
-  .role-switcher select {
-    min-width: 0;
-    max-width: 128px;
-    text-overflow: ellipsis;
-  }
   .search-and-mobile-filter {
     min-width: 0;
   }

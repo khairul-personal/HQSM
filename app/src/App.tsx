@@ -2,12 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { createHashRouter, redirect, RouterProvider, useLocation, useNavigate } from "react-router";
 import {
   AlertCircle,
-  Bell,
-  BookOpenCheck,
-  FileText,
-  BriefcaseBusiness,
-  Building2,
-  ClipboardList,
   Check,
   CheckCircle2,
   ChevronDown,
@@ -17,34 +11,21 @@ import {
   Columns3,
   Download,
   Filter,
-  GraduationCap,
-  HandCoins,
   HeartPulse,
-  IdCard,
   Import,
-  LayoutDashboard,
   ListFilter,
-  LoaderCircle,
   Menu,
   MessageSquareText,
   MoreHorizontal,
-  PanelLeftClose,
   Plus,
   Printer,
   RotateCcw,
   Search,
-  Settings,
   ShieldAlert,
   SlidersHorizontal,
   Sparkles,
-  UserRound,
-  Users,
   WalletCards,
-  WifiOff,
   X,
-  type LucideIcon,
-  LogOut,
-  Palette,
 } from "lucide-react";
 import StudentProfile from "./StudentProfile";
 import StaffDirectory from "./StaffDirectory";
@@ -60,8 +41,10 @@ import Login from "./Login";
 import Dashboard from "./Dashboard";
 import TeacherToday from "./TeacherToday";
 import DesignSystemPage from "./DesignSystemPage";
-import { InstitutionSettingsProvider, useInstitutionSettings } from "./InstitutionSettingsContext";
-import { isPhotoVisible } from "./settings-domain";
+import AppShell from "./shell/AppShell";
+import DevInspector from "./shell/DevInspector";
+import { ShellStateProvider } from "./shell/ShellState";
+import { InstitutionSettingsProvider } from "./InstitutionSettingsContext";
 import SystemStatesReview, {
   BlockedActionNotice,
   SubscriptionChrome,
@@ -302,221 +285,6 @@ function StatusBadge({ status }: { status: Status }) {
       <i className="status-dot" />
       {status}
     </span>
-  );
-}
-
-function AppShell({
-  children,
-  role,
-  setRole,
-  activeSection = "students",
-  onNavigate,
-}: {
-  children: React.ReactNode;
-  role: PrototypeRole;
-  setRole: (role: PrototypeRole) => void;
-  activeSection?: AppSection;
-  onNavigate?: (section: AppSection) => void;
-}) {
-  const { settings } = useInstitutionSettings();
-  const photosVisible = isPhotoVisible(settings, "main");
-  return (
-    <div className={`student-shell ds-page ${photosVisible ? "" : "photos-hidden"}`}>
-      <aside className="student-sidebar">
-        <div className="student-brand">
-          <span>HQ</span>
-          <div>
-            <b>হলি কুরআন</b>
-            <small>স্কুল এন্ড মাদরাসা</small>
-          </div>
-          <PanelLeftClose size={16} />
-        </div>
-        <nav aria-label="প্রধান নেভিগেশন">
-          <button
-            className={activeSection === "dashboard" ? "active" : ""}
-            onClick={() => onNavigate?.("dashboard")}
-          >
-            <LayoutDashboard size={18} />
-            <span>ওভারভিউ</span>
-          </button>
-          <p>একাডেমিক</p>
-          <button
-            className={activeSection === "admissions" ? "active" : ""}
-            onClick={() => onNavigate?.("admissions")}
-          >
-            <ClipboardList size={18} />
-            <span>ভর্তি ব্যবস্থাপনা</span>
-            <b>১৪</b>
-          </button>
-          <button
-            className={activeSection === "students" ? "active" : ""}
-            onClick={() => onNavigate?.("students")}
-          >
-            <Users size={18} />
-            <span>শিক্ষার্থী</span>
-            <b>১২৪৮</b>
-          </button>
-          <button>
-            <GraduationCap size={18} />
-            <span>ক্লাস ও সেকশন</span>
-          </button>
-          <button
-            className={activeSection === "attendance" ? "active" : ""}
-            onClick={() => onNavigate?.("attendance")}
-          >
-            <IdCard size={18} />
-            <span>আজ · হাজিরা</span>
-          </button>
-          <button
-            className={activeSection === "homework" ? "active" : ""}
-            onClick={() => onNavigate?.("homework")}
-          >
-            <BookOpenCheck size={18} />
-            <span>হোমওয়ার্ক</span>
-            <b>৬</b>
-          </button>
-          <button
-            className={activeSection === "examPapers" ? "active" : ""}
-            onClick={() => onNavigate?.("examPapers")}
-          >
-            <FileText size={18} />
-            <span>প্রশ্নপত্র</span>
-            <b>৩</b>
-          </button>
-          <button
-            className={activeSection === "guardian" ? "active" : ""}
-            onClick={() => onNavigate?.("guardian")}
-          >
-            <UserRound size={18} />
-            <span>অভিভাবক হোম</span>
-          </button>
-          <p>পরিচালনা</p>
-          <button
-            className={activeSection === "staff" ? "active" : ""}
-            onClick={() => onNavigate?.("staff")}
-          >
-            <BriefcaseBusiness size={18} />
-            <span>শিক্ষক ও কর্মচারী</span>
-            <b>৮৭</b>
-          </button>
-          <button
-            className={activeSection === "fees" ? "active" : ""}
-            onClick={() => onNavigate?.("fees")}
-          >
-            <WalletCards size={18} />
-            <span>ফি ও পেমেন্ট</span>
-          </button>
-          <button
-            className={activeSection === "sponsorships" ? "active" : ""}
-            onClick={() => onNavigate?.("sponsorships")}
-          >
-            <HandCoins size={18} />
-            <span>স্পন্সরশিপ ও ফান্ড</span>
-            <b>৪</b>
-          </button>
-          <button>
-            <MessageSquareText size={18} />
-            <span>যোগাযোগ</span>
-          </button>
-          <button
-            className={activeSection === "settings" ? "active" : ""}
-            onClick={() => onNavigate?.("settings")}
-          >
-            <Settings size={18} />
-            <span>সেটিংস</span>
-          </button>
-        </nav>
-        <nav aria-label="Prototype">
-          <p>Prototype</p>
-          <button
-            className={activeSection === "designSystem" ? "active" : ""}
-            onClick={() => onNavigate?.("designSystem")}
-          >
-            <Palette size={18} />
-            <span>ডিজাইন সিস্টেম</span>
-          </button>
-        </nav>
-        <div className="sidebar-profile">
-          <span className="ds-avatar small">রা</span>
-          <div>
-            <b>রাশেদ আহমেদ</b>
-            <small>একাডেমিক অ্যাডমিন</small>
-          </div>
-          <button
-            type="button"
-            className="sidebar-signout"
-            aria-label="সাইন আউট"
-            title="সাইন আউট"
-            onClick={() => onNavigate?.("login")}
-          >
-            <LogOut size={17} />
-          </button>
-        </div>
-      </aside>
-      <section className="student-workspace">
-        <header className="student-topbar">
-          <button className="mobile-menu" aria-label="মেনু">
-            <Menu size={20} />
-          </button>
-          <button className="institution-picker">
-            <span className="mini-mark">HQ</span>
-            <div>
-              <small>প্রতিষ্ঠান</small>
-              <b>হলি কুরআন স্কুল</b>
-            </div>
-            <ChevronDown size={14} />
-          </button>
-          <button className="branch-picker">
-            <Building2 size={16} />
-            <div>
-              <small>শাখা</small>
-              <b>সকল শাখা</b>
-            </div>
-            <em>মিশ্র</em>
-            <ChevronDown size={14} />
-          </button>
-          <div className="topbar-spacer" />
-          <label className="role-switcher" title="Prototype permission role">
-            <span>DEV ROLE</span>
-            <select value={role} onChange={(event) => setRole(event.target.value as PrototypeRole)}>
-              {(activeSection === "staff"
-                ? staffRoleKeys.map(
-                    (key) =>
-                      [key, prototypeRoles[key]] as [
-                        PrototypeRole,
-                        (typeof prototypeRoles)[PrototypeRole],
-                      ],
-                  )
-                : activeSection === "admissions"
-                  ? (["admin", "admission-officer"] as PrototypeRole[]).map(
-                      (key) =>
-                        [key, prototypeRoles[key]] as [
-                          PrototypeRole,
-                          (typeof prototypeRoles)[PrototypeRole],
-                        ],
-                    )
-                  : (Object.entries(prototypeRoles) as Array<
-                      [PrototypeRole, (typeof prototypeRoles)[PrototypeRole]]
-                    >)
-              ).map(([key, value]) => (
-                <option key={key} value={key}>
-                  {value.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <span className="privacy-pill">
-            <ShieldAlert size={14} /> সীমিত অ্যাক্সেস
-          </span>
-          <button className="icon-button" aria-label="নোটিফিকেশন">
-            <Bell size={18} />
-            <i />
-          </button>
-          <span className="ds-avatar small">রা</span>
-        </header>
-        {children}
-      </section>
-    </div>
   );
 }
 
@@ -1331,10 +1099,25 @@ function Application() {
   const designSystemSection = isSectionPath(route, "designSystem");
   const dashboardSection = isSectionPath(route, "dashboard");
   const attendanceSection = isSectionPath(route, "attendance");
+  // Screens outside the shell keep the floating subscription notice; inside it the shell shows the strip.
+  const usesShell =
+    notFound ||
+    !(
+      guardianSection ||
+      (homeworkSection && role === "guardian") ||
+      (designSystemSection && resolveWorkspacePermission(prototypeRoles[role].context).designSystem)
+    );
 
   return (
     <>
-      {!loginSection && <SubscriptionChrome />}
+      {!loginSection && !usesShell && <SubscriptionChrome />}
+      {!loginSection && (
+        <DevInspector
+          role={role}
+          setRole={setRole}
+          activeSection={staffSection ? "staff" : admissionSection ? "admissions" : undefined}
+        />
+      )}
       {loginSection ? (
         <Login
           onSignedIn={(membership) => {
@@ -1372,7 +1155,7 @@ function Application() {
           activeSection="dashboard"
           onNavigate={navigateToSection}
         >
-          <Dashboard role={role} />
+          <Dashboard role={role} onNavigate={navigateToSection} />
         </AppShell>
       ) : attendanceSection ? (
         <AppShell
@@ -1525,7 +1308,9 @@ export default function App() {
   return (
     <InstitutionSettingsProvider>
       <SubscriptionProvider>
-        <RouterProvider router={router} />
+        <ShellStateProvider>
+          <RouterProvider router={router} />
+        </ShellStateProvider>
       </SubscriptionProvider>
     </InstitutionSettingsProvider>
   );

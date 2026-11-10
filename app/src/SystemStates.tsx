@@ -147,22 +147,10 @@ export function useSubscription() {
   return value;
 }
 
+/** Floating subscription notice for screens outside the app shell. Test switch: development inspector. */
 export function SubscriptionChrome() {
-  const { mode, setMode } = useSubscription();
-  return (
-    <>
-      {mode !== "active" && <SubscriptionBanner mode={mode} />}
-      <label className="subscription-dev-tool">
-        <span>SUBSCRIPTION</span>
-        <select value={mode} onChange={(event) => setMode(event.target.value as SubscriptionMode)}>
-          <option value="active">Active</option>
-          <option value="grace">Grace · ১৪ দিন</option>
-          <option value="limited">Limited · ৩০ দিন</option>
-          <option value="suspended">Suspended</option>
-        </select>
-      </label>
-    </>
-  );
+  const { mode } = useSubscription();
+  return mode !== "active" ? <SubscriptionBanner mode={mode} /> : null;
 }
 
 export function SubscriptionBanner({ mode }: { mode: Exclude<SubscriptionMode, "active"> }) {

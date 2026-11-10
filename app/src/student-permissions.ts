@@ -671,3 +671,76 @@ export function homeSectionForRole(
       return "students";
   }
 }
+
+// ---------- Shell navigation (PRD ch.1 role × module table) ----------
+
+export type NavSection =
+  | "dashboard"
+  | "admissions"
+  | "students"
+  | "attendance"
+  | "homework"
+  | "examPapers"
+  | "fees"
+  | "sponsorships"
+  | "staff"
+  | "settings";
+
+const navByRole: Record<PrototypeRole, NavSection[]> = {
+  admin: [
+    "dashboard",
+    "admissions",
+    "students",
+    "attendance",
+    "homework",
+    "examPapers",
+    "fees",
+    "sponsorships",
+    "staff",
+    "settings",
+  ],
+  muhtamim: [
+    "dashboard",
+    "admissions",
+    "students",
+    "attendance",
+    "homework",
+    "examPapers",
+    "fees",
+    "sponsorships",
+    "staff",
+    "settings",
+  ],
+  "academic-admin": [
+    "dashboard",
+    "admissions",
+    "students",
+    "attendance",
+    "homework",
+    "examPapers",
+    "settings",
+  ],
+  "finance-lead": ["dashboard", "students", "fees", "sponsorships", "staff", "settings"],
+  cashier: ["students", "fees"],
+  "admission-officer": ["admissions", "students"],
+  "class-teacher": ["attendance", "students", "homework", "examPapers"],
+  "male-staff": ["attendance", "students", "homework"],
+  "exam-controller": ["examPapers", "students"],
+  "welfare-officer": ["students"],
+  "hr-officer": ["staff"],
+  self: ["students", "staff"], // lands on students (homeSectionForRole); that screen masks by its own resolver
+  guardian: [],
+};
+
+/**
+ * Menu entries a role may see in the app shell. A hidden entry is not authorization — every screen
+ * still runs its own resolver, and the backend checks again.
+ */
+export function resolveNavigation(context: PermissionContext): NavSection[] {
+  return navByRole[context.role];
+}
+
+/** Phone bottom navigation: the role's first four destinations (the fifth slot is "আরও"). */
+export function resolveBottomNavigation(context: PermissionContext): NavSection[] {
+  return resolveNavigation(context).slice(0, 4);
+}
